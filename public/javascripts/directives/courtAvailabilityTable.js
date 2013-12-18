@@ -7,37 +7,57 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
         restrict: 'E',
         templateUrl: 'templates/courtAvailabilityTable',
         controller: function($scope, $http) {
+            //Private helper function to check if the court is open
+            $scope.isOpen = function(todayHours, currentHour){
+                //Closing hour is less than opening hour means (close <= selectedTime < open)
+                if(todayHours.close < todayHours.open){
+                    //Check if the court is closed for the selected time
+                    if(currentHour < todayHours.open && currentHour >= todayHours.close){
+                        return false;
+                    }
+                } else {
+                    //Check if the court is closed for the selected time
+                    if(currentHour < todayHours.open || currentHour >= todayHours.close){
+                        return false;
+                    }
+                }
+                return true;
+            };
+
             $scope.$on('selectedLocationBroadcast', function(event, args){
                 var availability = {};
                 $scope.selectedLocation = args.location;
                 var hours = $scope.selectedLocation.regularHours;
                 var todayDate = moment($('#time-court-selection-date-input').val(), "YYYY-MM-DD");
                 var todayHours = hours[todayDate.day()];
-                var isOpen = true;
                 var currentHour = moment($('#time-court-selection-time-input').val(), "hh:mm A").hour();
+                var isOpen = $scope.isOpen(todayHours, currentHour);
 
-                //Closing hour is less than opening hour means (close <= selectedTime < open)
-                if(todayHours.close < todayHours.open){
-                    //Check if the court is closed for the selected time
-                    if(currentHour < todayHours.open && currentHour >= todayHours.close){
-                        isOpen = false;
-                    }
-                } else {
-                    //Check if the court is closed for the selected time
-                    if(currentHour < todayHours.open || currentHour >= todayHours.close){
-                        isOpen = false;
-                    }
-                }
+                //Calculate number of columns to be UI responsive. Show more hours if user's screen is wider.
+                //(Schedule table width - court label column) / schedule item width then divided into half
+                var halfDisplayCount = Math.floor((($('#time-court-selection-table').width()-130) / 100) / 2);
 
                 //If the court is closed, show next day schedule
                 if(!isOpen){
-                    currentHour = hours[todayDate.day()+1].open+3;
+                    todayHours = hours[todayDate.day() + 1];
+                    currentHour = todayHours.open + halfDisplayCount;
                 }
 
                 availability.date = todayDate;
                 availability.courts = [];
                 availability.times = [];
-                for(var iTime = currentHour-3; iTime < currentHour+3; iTime++){
+                for(var iTime = currentHour-halfDisplayCount; iTime < currentHour+halfDisplayCount; iTime++){
+
+                    //If closed, run to the next day
+                    if(!$scope.isOpen(todayHours, moment(iTime, "hh").hour())){
+                        //Calculate leftover
+                        var leftover = currentHour + halfDisplayCount - iTime;
+                        //Reset the end hour
+                        halfDisplayCount = 0;
+                        iTime = hours[todayDate.day() + 1].open;
+                        currentHour = iTime + leftover;
+                    }
+
                     availability.times.push(moment().hour(iTime).format('hA'));
                     for(var courtNo = 0; courtNo < $scope.selectedLocation.courtCount; courtNo++){
                         if(!$.isArray(availability.courts[courtNo])){

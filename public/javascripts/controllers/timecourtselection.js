@@ -8,11 +8,11 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
         var timeInputContainer = $('#time-court-selection-time-input');
         var dateInput = dateInputContainer.find('input');
         var timeInput = timeInputContainer.find('input');
-        $scope.currentDate = dateInput.val();
+        $scope.currentDate = moment(dateInput.val(), 'YYYY-MM-DD').format('dddd, MMMM Do YYYY');
         $scope.currentTime = timeInput.val();
 
         dateInputContainer.on('change.bfhdatepicker', function(event){
-            $scope.currentDate = dateInput.val();
+            $scope.currentDate = moment(dateInput.val(), 'YYYY-MM-DD').format('dddd, MMMM Do YYYY');
             $scope.$apply();
         });
 
