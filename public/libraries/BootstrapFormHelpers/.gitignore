@@ -12,3 +12,9 @@ dev-slider.html
 dev-colorpicker.html
 dev-phone.html
 dev-number.html
+
+*
+!dist/
+!dist/*/
+!dist/css/*
+!dist/js/*
