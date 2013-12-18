@@ -1,0 +1,16 @@
+//
+   Created by ZoM on 14/12/13.
+
+table(class='table table-hover', id='time-court-selection-table')
+  thead
+    th
+    th(ng-repeat='time in schedule.times') {{time}}
+  tbody
+    tr(ng-repeat='court in schedule.courts track by $index')
+      td(class='court-selection-label')
+        strong Court {{$index+1}}
+      td(ng-repeat='courtInfo in court track by $index')
+        button(type='button', class='btn btn-info', ng-click='book(this)')
+          span(class='glyphicon glyphicon-unchecked')
+          //|  {{courtInfo.isAvailable}}
+          |  {{courtInfo.price | currency:"$"}}

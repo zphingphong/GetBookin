@@ -1,0 +1,103 @@
+extends layout
+
+block additionalCss
+  link(rel='stylesheet', href='/stylesheets/index.css', type='text/css')
+
+  // ---- jQuery & Plugins ----
+  link(rel='stylesheet', href='/libraries/fancyBox/source/jquery.fancybox.css', type='text/css')
+
+  // ---- Bootstrap & Plugins ----
+  link(rel='stylesheet', href='libraries/BootstrapFormHelpers/dist/css/bootstrap-formhelpers.min.css', type='text/css')
+
+block mainContainer
+  section(id='location-selection-container', ng-controller='LocationCtrl')
+    h1 Location&nbsp;
+      small Where do you want to book a court?
+    .well
+      .row
+        div(class='col-sm-6 col-md-5')
+          //.row
+          //  div(class='col-sm-12')
+          //    div(class='input-group pad-bottom-small')
+          //      input(type='text', class='form-control', placeholder='Enter your address to find nearest court')
+          //      span(class='input-group-btn')
+          //        button(class='btn btn-default')
+          //          span(class='glyphicon glyphicon-search')
+          .row
+            div(class='col-sm-12')
+              div(id='location-selection-list', class='panel-group')
+                div(class='panel panel-default', ng-repeat='location in locations', ng-cloak)
+                  div(class='panel-heading')
+                    a(data-toggle='collapse', data-parent='#location-selection-list', href='#location-selection-{{location.id}}')
+                      div
+                        h4 {{location.name}}
+                        span(class='glyphicon glyphicon-map-marker') &nbsp;
+                        address {{location.address.street}}, {{location.address.city}}, {{location.address.province}} {{location.address.postalCode}}
+                  div(id='location-selection-{{location.id}}', class='panel-collapse collapse pad-medium')
+                    strong {{location.courtCount}} courts
+                    | &nbsp;at this location
+                    br
+                    span(class='glyphicon glyphicon-time') &nbsp;
+                    | {{location.hoursText}}
+                    br
+                    span(class='glyphicon glyphicon-earphone') &nbsp;
+                    | {{location.phones[0]}}
+                    br
+                    span(class='glyphicon glyphicon-globe') &nbsp;
+                    a(href='{{location.websites[0]}}', target='_blank') {{location.websites[0]}}
+                    br
+                    span(class='glyphicon glyphicon-envelope') &nbsp;
+                    a(href='mailto:{{location.emails[0]}}') {{location.emails[0]}}
+                    div(id='court-images-container-{{location.id}}', class='court-images-container')
+                      a(href='{{image}}', rel='court-image-{{location.id}}', class='court-image-link', ng-repeat='image in location.images', court-image-slider)
+                        div(class='court-image', style='background-image: url("{{image}}")')
+                    div(class='text-right')
+                      a(type='button', class='btn btn-success', ng-click='selectLocation(location.id)') Select
+        div(class='col-sm-6 col-md-7')
+          #location-map
+
+  section(id='time-court-selection-container', class='section-spaced', ng-controller='TimeCourtSelectionCtrl')
+    h1 Time & Court&nbsp;
+      small When and which court do you want to book?
+    .well
+      .row
+        div(class='col-sm-5')
+          div(id='time-court-selection-date-input', class='bfh-datepicker', data-format='y-m-d', data-min='today')
+        div(class='col-sm-5')
+          div(id='time-court-selection-time-input', class='bfh-timepicker', data-mode='12h')
+        div(class='col-sm-2')
+          button(type='button', class='btn btn-default full-width') View Floor Plan
+      .row
+        div(class='col-sm-12')
+          button(type='button', class='btn btn-info btn-xs full-width margin-top-bottom-small', ng-click='showAvailibility()')
+            h4 View Badminton Vancouver court availability for {{currentDate}} {{currentTime}}
+      court-availability-table
+
+  section(class='section-spaced')
+
+
+
+
+
+block additionalJs
+  //App JS
+  script(src='javascripts/controllers/location.js')
+  script(src='javascripts/controllers/timecourtselection.js')
+  script(src='javascripts/page/index.js')
+
+  // ---- jQuery & Plugins ----
+  script(src='libraries/carouFredSel/jquery.carouFredSel-6.2.1-packed.js')
+  script(src='libraries/carouFredSel/helper-plugins/jquery.mousewheel.min.js')
+  script(src='libraries/carouFredSel/helper-plugins/jquery.touchSwipe.min.js')
+  script(src='libraries/fancyBox/source/jquery.fancybox.pack.js')
+
+  // ---- Bootstrap & Plugins ----
+  script(src='libraries/BootstrapFormHelpers/dist/js/bootstrap-formhelpers.min.js')
+
+  // ---- Additional Libraries ----
+  script(src='libraries/moment/moment.min.js')
+
+  script(src='javascripts/directives/courtImageSlider.js')
+  script(src='javascripts/directives/courtAvailabilityTable.js')
+
+
