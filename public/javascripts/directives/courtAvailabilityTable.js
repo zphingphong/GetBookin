@@ -24,9 +24,9 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 return true;
             };
 
-            $scope.$on('selectedLocationBroadcast', function(event, args){
+            $scope.refreshSchedule = function(location) {
                 var availability = {};
-                $scope.selectedLocation = args.location;
+                $scope.selectedLocation = location ? location : $scope.selectedLocation;
                 var hours = $scope.selectedLocation.regularHours;
                 var todayDate = moment($('#time-court-selection-date-input').val(), "YYYY-MM-DD");
                 var todayHours = hours[todayDate.day()];
@@ -35,10 +35,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                 //Calculate number of columns to be UI responsive. Show more hours if user's screen is wider.
                 //(Schedule table width - court label column) / schedule item width then divided into half
-                var halfDisplayCount = Math.floor((($('#time-court-selection-table').width()-130) / 100) / 2);
+                var halfDisplayCount = Math.floor((($('#time-court-selection-table').width() - 130) / 100) / 2);
 
                 //If the court is closed, show next day schedule
-                if(!isOpen){
+                if (!isOpen) {
                     todayHours = hours[todayDate.day() + 1];
                     currentHour = todayHours.open + halfDisplayCount;
                 }
@@ -46,10 +46,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 availability.date = todayDate;
                 availability.courts = [];
                 availability.times = [];
-                for(var iTime = currentHour-halfDisplayCount; iTime < currentHour+halfDisplayCount; iTime++){
+                for (var iTime = currentHour - halfDisplayCount; iTime < currentHour + halfDisplayCount; iTime++) {
 
                     //If closed, run to the next day
-                    if(!$scope.isOpen(todayHours, moment(iTime, "hh").hour())){
+                    if (!$scope.isOpen(todayHours, moment(iTime, "hh").hour())) {
                         //Calculate leftover
                         var leftover = currentHour + halfDisplayCount - iTime;
                         //Reset the end hour
@@ -59,8 +59,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     }
 
                     availability.times.push(moment().hour(iTime).format('hA'));
-                    for(var courtNo = 0; courtNo < $scope.selectedLocation.courtCount; courtNo++){
-                        if(!$.isArray(availability.courts[courtNo])){
+                    for (var courtNo = 0; courtNo < $scope.selectedLocation.courtCount; courtNo++) {
+                        if (!$.isArray(availability.courts[courtNo])) {
                             availability.courts[courtNo] = [];
                         }
                         availability.courts[courtNo].push({
@@ -71,6 +71,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 }
 
                 $scope.schedule = availability;
+            };
+
+            $scope.$on('selectedLocationBroadcast', function(event, args){
+                $scope.refreshSchedule(args.location);
 //                $http.get('/schedule/201312140800').success(function(schedule) {
 //                    console.log(schedule);
 //                    $scope.schedule = schedule;

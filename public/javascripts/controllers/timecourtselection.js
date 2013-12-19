@@ -27,6 +27,7 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
     });
 
     $scope.showAvailibility = function(){
+        $scope.refreshSchedule();
     };
 
     $scope.$on('selectedLocationBroadcast', function(event, args){
