@@ -65,7 +65,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                         }
                         availability.courts[courtNo].push({
                             isAvailable: true,
-                            price: 20
+                            price: 20,
+                            selected: false
                         });
                     }
                 }
@@ -75,31 +76,55 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
             $scope.$on('selectedLocationBroadcast', function(event, args){
                 $scope.refreshSchedule(args.location);
-//                $http.get('/schedule/201312140800').success(function(schedule) {
-//                    console.log(schedule);
-//                    $scope.schedule = schedule;
-//                });
             });
 
-            $scope.book = function(target){
+            $scope.timeCourtSelected = function(target){
+
+                //Initiate session storage
+                if(!sessionStorage.selectedTimeCourt){
+                    sessionStorage.selectedTimeCourt = JSON.stringify([]);
+                }
+
                 console.log(target);
-
-//                location: String,
-//                courtNo: Number,
-//                dateTime: Date,
-//                contactName: String,
-//                contactNo: String
-
+                var courtNo = target.$parent.$index + 1; //Refer to court number based on where it's positioned in the UI
                 var selectedHour = moment($('#time-court-selection-table th').get(target.$index+1).innerText, 'hA').hour();
-                $http.post('/book', {
-                    location: $scope.selectedLocation._id,
-                    courtNo: target.$parent.$index+1, //Refer to court number based on where it's positioned in the UI
-                    dateTime: $scope.schedule.date.hour(selectedHour).toDate(),
-                    contactName: 'Pan',
-                    contactNo: '7781234567'
-                }).success(function(status){
-                    console.log(moment(status.dateTime).hour(), moment(status.dateTime).date());
-                });
+                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format('YYYY-MM-DD hh:mm A'); //For saving locally (must be string for date comparison)
+                var locationObjId = $scope.selectedLocation._id;
+                var selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
+
+                if(target.courtInfo.selected){
+                    target.courtInfo.selected = false;
+
+                    //Search selectedTimeCourt array and return the first item of the result
+                    var booking = $.grep(selectedTimeCourts, function(booking){
+                        return booking.courtNo == courtNo && booking.dateTime == dateTimeStr && booking.location == locationObjId;
+                    });
+                    selectedTimeCourts.splice(selectedTimeCourts.indexOf(booking[0]), 1);
+                } else {
+                    target.courtInfo.selected = true;
+                    selectedTimeCourts.push({
+                        location: locationObjId,
+                        courtNo: courtNo,
+                        dateTime: dateTimeStr,
+                        contactName: 'Pan',
+                        contactNo: '7781234567'
+                    });
+                }
+
+                sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
+
+                console.log(JSON.parse(sessionStorage.selectedTimeCourt));
+
+
+//                $http.post('/book', {
+//                    locationObjId: $scope.selectedLocation._id,
+//                    courtNo: target.$parent.$index+1, //Refer to court number based on where it's positioned in the UI
+//                    dateTime: $scope.schedule.date.hour(selectedHour).toDate(), // Has to be JS native date ($scope.schedule.date.hour(selectedHour).toDate())
+//                    contactName: 'Pan',
+//                    contactNo: '7781234567'
+//                }).success(function(status){
+//                    console.log(moment(status.dateTime).hour(), moment(status.dateTime).date());
+//                });
             };
         },
         link: function(scope, element, attrs){
