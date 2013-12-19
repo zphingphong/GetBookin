@@ -10,6 +10,10 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
         var timeInput = timeInputContainer.find('input');
         $scope.currentDate = moment(dateInput.val(), 'YYYY-MM-DD').format('dddd, MMMM Do YYYY');
         $scope.currentTime = timeInput.val();
+        $scope.locationName = '';
+        $scope.$on('selectedLocationBroadcast', function(event, args){
+            $scope.locationName = args.location.name;
+        });
 
         dateInputContainer.on('change.bfhdatepicker', function(event){
             $scope.currentDate = moment(dateInput.val(), 'YYYY-MM-DD').format('dddd, MMMM Do YYYY');
