@@ -53,6 +53,12 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     currentHour = todayHours.open + halfDisplayCount;
                 }
 
+                //Check pricing scheme
+                var currentPrice;
+                if(location.pricingPattern == 'flat'){
+                     currentPrice = location.pricingFlat;
+                }
+
                 availability.date = todayDate;
                 availability.courts = [];
                 availability.times = [];
@@ -84,7 +90,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                         });
                         availability.courts[courtNo].push({
                             isAvailable: true,
-                            price: 20,
+                            price: currentPrice,
                             selected: isSelected
                         });
                     }
