@@ -39,6 +39,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 $scope.selectedLocation = location ? location : $scope.selectedLocation;
                 var hours = $scope.selectedLocation.regularHours;
                 var todayDate = moment(dateInput.val(), "YYYY-MM-DD");
+                var todayDay = todayDate.day();
                 var todayHours = hours[todayDate.day()];
                 var currentHour = moment(timeInput.val(), "hh:mm A").hour();
                 var isOpen = $scope.isOpen(todayHours, currentHour);
@@ -49,14 +50,20 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                 //If the court is closed, show next day schedule
                 if (!isOpen) {
-                    todayHours = hours[todayDate.day() + 1];
+                    todayDay++; //Move to next day
+                    if(todayDay == 7){ //If last day of week (sat), reset it
+                        todayDay = 0;
+                    }
+                    todayHours = hours[todayDay];
                     currentHour = todayHours.open + halfDisplayCount;
                 }
 
                 //Check pricing scheme
                 var currentPrice;
-                if(location.pricingPattern == 'flat'){
-                     currentPrice = location.pricingFlat;
+                if($scope.selectedLocation.pricingPattern == 'flat'){
+                     currentPrice = $scope.selectedLocation.pricingFlat;
+                } else if($scope.selectedLocation.pricingPattern == 'day'){
+                    currentPrice = $scope.selectedLocation.pricingDay[todayDay];
                 }
 
                 availability.date = todayDate;
@@ -66,12 +73,20 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                     //If closed, run to the next day
                     if (!$scope.isOpen(todayHours, moment(iTime, "hh").hour())) {
+                        todayDay++; //Move to next day
+                        if(todayDay == 7){ //If last day of week (sat), reset it
+                            todayDay = 0;
+                        }
                         //Calculate leftover
                         var leftover = currentHour + halfDisplayCount - iTime;
                         //Reset the end hour
                         halfDisplayCount = 0;
-                        iTime = hours[todayDate.day() + 1].open;
+                        iTime = hours[todayDay].open;
                         currentHour = iTime + leftover;
+                        //Get the price for the next day
+                        if($scope.selectedLocation.pricingPattern == 'day'){
+                            currentPrice = $scope.selectedLocation.pricingDay[todayDay];
+                        }
                     }
 
                     var time = moment().hour(iTime).format('hA');

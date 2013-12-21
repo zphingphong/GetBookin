@@ -36,10 +36,7 @@ var locationSchema = mongoose.Schema({
     images: [String],
     pricingPattern: String,
     pricingFlat: Number,
-    pricingDay: [{
-        day: String,
-        price: Number
-    }],
+    pricingDay: [Number],
     courtCount: Number
 });
 
