@@ -47,6 +47,9 @@ app.get('/users', user.list);
 app.get('/partials/:name', routes.partials);
 app.get('/templates/:name', routes.templates);
 
+//Locals
+app.locals.config = require('./public/config');
+
 mongoose.connect('mongodb://root:getzbookin@dbh45.mongolab.com:27457/getbookinstage');
 
 var db = mongoose.connection;

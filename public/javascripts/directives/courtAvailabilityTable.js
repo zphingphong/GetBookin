@@ -144,24 +144,28 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     selectedTimeCourts.push({
                         location: locationObjId,
                         courtNo: courtNo,
-                        dateTime: dateTimeStr,
-                        contactName: 'Pan',
-                        contactNo: '7781234567'
+                        dateTime: dateTimeStr
                     });
                 }
 
                 sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
-
-//                $http.post('/book', {
-//                    locationObjId: $scope.selectedLocation._id,
-//                    courtNo: target.$parent.$index+1, //Refer to court number based on where it's positioned in the UI
-//                    dateTime: $scope.schedule.date.hour(selectedHour).toDate(), // Has to be JS native date ($scope.schedule.date.hour(selectedHour).toDate())
-//                    contactName: 'Pan',
-//                    contactNo: '7781234567'
-//                }).success(function(status){
-//                    console.log(moment(status.dateTime).hour(), moment(status.dateTime).date());
-//                });
             };
+
+            $scope.confirmBooking = function(){
+                sessionStorage.contactInfo = JSON.stringify({
+                    contactName: 'Pan',
+                    contactNo: '7781234567'
+                });
+
+                $http.post('/book', {
+                    selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
+                    contactInfo: JSON.parse(sessionStorage.contactInfo)
+                }).success(function(status){
+                    console.log(status);
+                });
+            };
+
+            $scope.confirmBooking();
         },
         link: function(scope, element, attrs){
         }

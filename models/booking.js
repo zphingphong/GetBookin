@@ -3,6 +3,7 @@
  */
 
 var mongoose = require('mongoose');
+require('../public/config');
 
 
 var bookingSchema = mongoose.Schema({
@@ -16,22 +17,24 @@ var bookingSchema = mongoose.Schema({
     contactNo: String
 });
 
-var bookinModel = mongoose.model('Booking', bookingSchema);
-exports.model = bookinModel;
+var bookingModel = mongoose.model('Booking', bookingSchema);
+exports.model = bookingModel;
 
 
-exports.book = function(req, res, cb){
-    console.log(req.body);
-//    var bookingObj = new bookinModel.model({
-//        location: "AceBadminton",
-//        courtNo: 10,
-//        dateTime: Date,
-//        contactName: String,
-//        contactNo: String
-//    });
-//    bookingObj.save(function (err, bookings) {
-//    });
-    cb(req.body);
+exports.book = function(bookings, cb){
+    bookingModel.create(bookings, function(err, bookings){
+        if(err){
+            cb({
+                success: false,
+                error: 'Cannot book the court. Error - ' + err,
+                errorCode: ERROR_DB_FAILURE
+            });
+        } else {
+            cb({
+                success: true
+            });
+        }
+    })
 };
 
 exports.getBookingByCourtAndTime = function(req, res, cb){

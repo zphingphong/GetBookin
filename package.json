@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "GetBookin",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,6 +9,8 @@
     "mongoose": "latest",
     "express": "latest",
     "jade": "latest",
-    "stylus": "latest"
+    "stylus": "latest",
+    "moment": "latest",
+    "jquery": "latest"
   }
 }
