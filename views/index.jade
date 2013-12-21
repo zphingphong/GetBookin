@@ -33,7 +33,7 @@ block mainContainer
                         h4 {{location.name}}
                         span(class='glyphicon glyphicon-map-marker') &nbsp;
                         address {{location.address.street}}, {{location.address.city}}, {{location.address.province}} {{location.address.postalCode}}
-                  div(id='location-selection-{{location.id}}', class='panel-collapse collapse pad-medium')
+                  div(id='location-selection-{{location.id}}', ng-class='{"panel-collapse collapse pad-medium" : !location.selected, "panel-collapse collapse pad-medium in" : location.selected}')
                     strong {{location.courtCount}} courts
                     | &nbsp;at this location
                     br

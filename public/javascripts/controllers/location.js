@@ -27,6 +27,23 @@ window.getBookinNgApp.controller('LocationCtrl', function ($scope, $http) {
 //            }
 //        }, 30000);
 
+        //Check to see if the location is selected in the db. If it is, select it.
+        if(sessionStorage.selectedTimeCourt){
+            var selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
+            if(selectedTimeCourts.length > 0){
+                $.each($scope.locations, function(index, selectedLocation){
+                    if(selectedLocation._id == selectedTimeCourts[0].location){
+                        selectedLocation.selected = true;
+                        $scope.$emit('selectedLocationEmit', {
+                            location: selectedLocation
+                        });
+                        return false;
+                    }
+                });
+//            $('#location-selection-' + selectedLocation.id).collapse('show');
+            }
+        }
+
     });
 
     $scope.initializeMap = function(center){

@@ -25,12 +25,22 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
             };
 
             $scope.refreshSchedule = function(location) {
+
+                var selectedTimeCourts = [];
+                var dateInput = $('#time-court-selection-date-input');
+                var timeInput = $('#time-court-selection-time-input');
+
+                //Retrieve user selections from session storage
+                if(sessionStorage.selectedTimeCourt){
+                    selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
+                }
+
                 var availability = {};
                 $scope.selectedLocation = location ? location : $scope.selectedLocation;
                 var hours = $scope.selectedLocation.regularHours;
-                var todayDate = moment($('#time-court-selection-date-input').val(), "YYYY-MM-DD");
+                var todayDate = moment(dateInput.val(), "YYYY-MM-DD");
                 var todayHours = hours[todayDate.day()];
-                var currentHour = moment($('#time-court-selection-time-input').val(), "hh:mm A").hour();
+                var currentHour = moment(timeInput.val(), "hh:mm A").hour();
                 var isOpen = $scope.isOpen(todayHours, currentHour);
 
                 //Calculate number of columns to be UI responsive. Show more hours if user's screen is wider.
@@ -58,15 +68,24 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                         currentHour = iTime + leftover;
                     }
 
-                    availability.times.push(moment().hour(iTime).format('hA'));
+                    var time = moment().hour(iTime).format('hA');
+                    availability.times.push(time);
                     for (var courtNo = 0; courtNo < $scope.selectedLocation.courtCount; courtNo++) {
                         if (!$.isArray(availability.courts[courtNo])) {
                             availability.courts[courtNo] = [];
                         }
+
+                        //Display user's selection
+                        var isSelected = false;
+                        $.each(selectedTimeCourts, function(index, selectedTimeCourt){
+                            if(dateInput.val() + ' ' + time == selectedTimeCourt.dateTime && courtNo == selectedTimeCourt.courtNo-1){ //-1 because courtNo get store starts form 1 in session storage
+                                isSelected = true;
+                            }
+                        });
                         availability.courts[courtNo].push({
                             isAvailable: true,
                             price: 20,
-                            selected: false
+                            selected: isSelected
                         });
                     }
                 }
@@ -85,10 +104,9 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     sessionStorage.selectedTimeCourt = JSON.stringify([]);
                 }
 
-                console.log(target);
                 var courtNo = target.$parent.$index + 1; //Refer to court number based on where it's positioned in the UI
                 var selectedHour = moment($('#time-court-selection-table th').get(target.$index+1).innerText, 'hA').hour();
-                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format('YYYY-MM-DD hh:mm A'); //For saving locally (must be string for date comparison)
+                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format('YYYY-MM-DD hA'); //For saving locally (must be string for date comparison)
                 var locationObjId = $scope.selectedLocation._id;
                 var selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
 
@@ -112,9 +130,6 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 }
 
                 sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
-
-                console.log(JSON.parse(sessionStorage.selectedTimeCourt));
-
 
 //                $http.post('/book', {
 //                    locationObjId: $scope.selectedLocation._id,
