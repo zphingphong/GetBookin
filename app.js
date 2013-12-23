@@ -40,7 +40,8 @@ app.get('/', routes.index);
 //RESTful web services
 app.get('/location', location.location);
 app.get('/schedule/:datetime', location.scheduleByDateTime);
-app.post('/book', booking.book);
+app.post('/booking', booking.book);
+app.get('/booking', booking.searchBooking);
 app.get('/users', user.list);
 
 //Views

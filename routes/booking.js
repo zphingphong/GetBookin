@@ -22,8 +22,8 @@ exports.book = function(req, res){
     });
 };
 
-exports.bookingByCourtAndTime = function(req, res){
-    booking.getBookingByCourtAndTime(req, res, function(bookings){
+exports.searchBooking = function(req, res){
+    booking.bookingByDateTimeRange(moment(req.query.startDateTime, 'YYYY-MM-DD hA'), moment(req.query.endDateTime, 'YYYY-MM-DD hA'), req.query.location, function(bookings){
         res.send(bookings);
     });
 };

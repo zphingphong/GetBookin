@@ -37,9 +37,14 @@ exports.book = function(bookings, cb){
     })
 };
 
-exports.getBookingByCourtAndTime = function(req, res, cb){
-    var date = req.params.datetime;
-    bookinModel.find(function (err, bookings) {
+exports.bookingByDateTimeRange = function(startDateTime, endDateTime, location, cb){
+    bookingModel.find({
+        dateTime: {
+            $gte: startDateTime,
+            $lte: endDateTime
+        },
+        location: location
+    }, function (err, bookings) {
         if(err){
             console.error('Cannot retrieve location from database, error: ');
             console.error(err);

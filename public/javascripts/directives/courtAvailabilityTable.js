@@ -66,52 +66,78 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     currentPrice = $scope.selectedLocation.pricingDay[todayDay];
                 }
 
-                availability.date = todayDate;
                 availability.courts = [];
                 availability.times = [];
-                for (var iTime = currentHour - halfDisplayCount; iTime < currentHour + halfDisplayCount; iTime++) {
 
-                    //If closed, run to the next day
-                    if (!$scope.isOpen(todayHours, moment(iTime, "hh").hour())) {
-                        todayDay++; //Move to next day
-                        if(todayDay == 7){ //If last day of week (sat), reset it
-                            todayDay = 0;
-                        }
-                        //Calculate leftover
-                        var leftover = currentHour + halfDisplayCount - iTime;
-                        //Reset the end hour
-                        halfDisplayCount = 0;
-                        iTime = hours[todayDay].open;
-                        currentHour = iTime + leftover;
-                        //Get the price for the next day
-                        if($scope.selectedLocation.pricingPattern == 'day'){
-                            currentPrice = $scope.selectedLocation.pricingDay[todayDay];
-                        }
+                $http.get('/booking', {
+                    //Search for any booking since the beginning of today and the next 47 hours to make sure in case the schedule wraps around
+                    params: {
+                        startDateTime: moment(todayDate).hour(0).format('YYYY-MM-DD hA'),
+                        endDateTime: moment(todayDate).add('h', 47).format('YYYY-MM-DD hA'),
+                        location: $scope.selectedLocation._id
                     }
+                }).success(function(bookings) {
+                    todayDate.hour(currentHour - halfDisplayCount);
+                    for (var iTime = currentHour - halfDisplayCount; iTime < currentHour + halfDisplayCount; iTime++) {
 
-                    var time = moment().hour(iTime).format('hA');
-                    availability.times.push(time);
-                    for (var courtNo = 0; courtNo < $scope.selectedLocation.courtCount; courtNo++) {
-                        if (!$.isArray(availability.courts[courtNo])) {
-                            availability.courts[courtNo] = [];
-                        }
-
-                        //Display user's selection
-                        var isSelected = false;
-                        $.each(selectedTimeCourts, function(index, selectedTimeCourt){
-                            if(dateInput.val() + ' ' + time == selectedTimeCourt.dateTime && courtNo == selectedTimeCourt.courtNo-1){ //-1 because courtNo get store starts form 1 in session storage
-                                isSelected = true;
+                        //If closed, run to the next day
+                        if (!$scope.isOpen(todayHours, moment(iTime, "hh").hour())) {
+                            if(todayHours.close > todayHours.open){
+                                todayDate.add('d', 1); //Move to next day
                             }
-                        });
-                        availability.courts[courtNo].push({
-                            isAvailable: true,
-                            price: currentPrice,
-                            selected: isSelected
-                        });
-                    }
-                }
+                            todayDay = todayDate.day();
 
-                $scope.schedule = availability;
+                            //Calculate leftover
+                            var leftover = currentHour + halfDisplayCount - iTime;
+                            //Reset the end hour
+                            halfDisplayCount = 0;
+                            iTime = hours[todayDay].open;
+                            currentHour = iTime + leftover;
+                            todayDate.hour(currentHour);
+                            //Get the price for the next day
+                            if($scope.selectedLocation.pricingPattern == 'day'){
+                                currentPrice = $scope.selectedLocation.pricingDay[todayDay];
+                            }
+                        }
+
+                        var time = todayDate.hour(iTime).format('hA');
+                        var dateTimeStr = todayDate.format('YYYY-MM-DD hA');
+                        availability.times.push({
+                            time: time,
+                            date: todayDate.format('MMM Do'),
+                            dateTime: dateTimeStr
+                        });
+                        for (var courtNo = 0; courtNo < $scope.selectedLocation.courtCount; courtNo++) {
+                            if (!$.isArray(availability.courts[courtNo])) {
+                                availability.courts[courtNo] = [];
+                            }
+
+                            //Display user's selection
+                            var isSelected = false;
+                            $.each(selectedTimeCourts, function(index, selectedTimeCourt){
+                                if(dateTimeStr == selectedTimeCourt.dateTime && courtNo == selectedTimeCourt.courtNo-1){ //-1 because courtNo get store starts form 1 in session storage
+                                    isSelected = true;
+                                }
+                            });
+
+                            //Check if the court is available
+                            var existingBookings = $.grep(bookings, function(booking){
+                                return moment(booking.dateTime).format('YYYY-MM-DD hA') == dateTimeStr && booking.courtNo-1 == courtNo;
+                            });
+
+//                            console.log(existingBookings);
+
+                            availability.courts[courtNo].push({
+                                isAvailable: existingBookings.length > 0 ? false : true,
+                                price: currentPrice,
+                                selected: isSelected
+                            });
+                        }
+                    }
+
+                    $scope.schedule = availability;
+                });
+
             };
 
             $scope.$on('selectedLocationBroadcast', function(event, args){
@@ -125,9 +151,9 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     sessionStorage.selectedTimeCourt = JSON.stringify([]);
                 }
 
-                var courtNo = target.$parent.$index + 1; //Refer to court number based on where it's positioned in the UI
-                var selectedHour = moment($('#time-court-selection-table th').get(target.$index+1).innerText, 'hA').hour();
-                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format('YYYY-MM-DD hA'); //For saving locally (must be string for date comparison)
+                var courtNo = target.$parent.$parent.$index + 1; //Refer to court number based on where it's positioned in the UI
+                var dateTimeStr = $($('#time-court-selection-table th').get(target.$parent.$index+1)).attr('data-val');
+//                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format('YYYY-MM-DD hA'); //For saving locally (must be string for date comparison)
                 var locationObjId = $scope.selectedLocation._id;
                 var selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
 
@@ -157,15 +183,18 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     contactNo: '7781234567'
                 });
 
-                $http.post('/book', {
+                $http.post('/booking', {
                     selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
                     contactInfo: JSON.parse(sessionStorage.contactInfo)
                 }).success(function(status){
-                    console.log(status);
+                    if(status.success){
+//                        sessionStorage.selectedTimeCourt = JSON.stringify([]);
+                        $scope.refreshSchedule();
+                    }
                 });
             };
 
-            $scope.confirmBooking();
+//            $scope.confirmBooking();
         },
         link: function(scope, element, attrs){
         }
