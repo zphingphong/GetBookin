@@ -34,8 +34,12 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
         var timeCourtSelectionContainer = $('#time-court-selection-container');
         timeCourtSelectionContainer.show();
         $("html, body").animate({
-            scrollTop: $('#time-court-selection-container')[0].offsetTop
+            scrollTop: timeCourtSelectionContainer[0].offsetTop
         });
     });
+
+    $scope.bookSelectedCourts = function(){
+        $scope.$emit('selectedCourtsEmit');
+    };
 });
 

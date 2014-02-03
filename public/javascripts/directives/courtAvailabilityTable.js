@@ -178,11 +178,6 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
             };
 
             $scope.confirmBooking = function(){
-                sessionStorage.contactInfo = JSON.stringify({
-                    contactName: 'Pan',
-                    contactNo: '7781234567'
-                });
-
                 $http.post('/booking', {
                     selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
                     contactInfo: JSON.parse(sessionStorage.contactInfo)
