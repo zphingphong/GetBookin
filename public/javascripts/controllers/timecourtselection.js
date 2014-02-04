@@ -13,6 +13,11 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
         $scope.locationName = '';
         $scope.$on('selectedLocationBroadcast', function(event, args){
             $scope.locationName = args.location.name;
+            var timeCourtSelectionContainer = $('#time-court-selection-container');
+            timeCourtSelectionContainer.show();
+            $("html, body").animate({
+                scrollTop: timeCourtSelectionContainer[0].offsetTop
+            });
         });
 
         dateInputContainer.on('change.bfhdatepicker', function(event){
@@ -29,14 +34,6 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
     $scope.showAvailibility = function(){
         $scope.refreshSchedule();
     };
-
-    $scope.$on('selectedLocationBroadcast', function(event, args){
-        var timeCourtSelectionContainer = $('#time-court-selection-container');
-        timeCourtSelectionContainer.show();
-        $("html, body").animate({
-            scrollTop: timeCourtSelectionContainer[0].offsetTop
-        });
-    });
 
     $scope.bookSelectedCourts = function(){
         $scope.$emit('selectedCourtsEmit');

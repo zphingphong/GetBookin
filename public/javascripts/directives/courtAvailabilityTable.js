@@ -151,8 +151,11 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     sessionStorage.selectedTimeCourt = JSON.stringify([]);
                 }
 
-                var courtNo = target.$parent.$parent.$index + 1; //Refer to court number based on where it's positioned in the UI
-                var dateTimeStr = $($('#time-court-selection-table th').get(target.$parent.$index+1)).attr('data-val');
+                var timeIndex = target.$parent.$index;
+                var courtIndex = target.$parent.$parent.$index;
+                var courtNo = courtIndex + 1; //Refer to court number based on where it's positioned in the UI
+                var price = $scope.schedule.courts[courtIndex][timeIndex].price;
+                var dateTimeStr = $scope.schedule.times[timeIndex].dateTime;
 //                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format('YYYY-MM-DD hA'); //For saving locally (must be string for date comparison)
                 var locationObjId = $scope.selectedLocation._id;
                 var selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
@@ -170,7 +173,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     selectedTimeCourts.push({
                         location: locationObjId,
                         courtNo: courtNo,
-                        dateTime: dateTimeStr
+                        dateTime: dateTimeStr,
+                        price: price
                     });
                 }
 
