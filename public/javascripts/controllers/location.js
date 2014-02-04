@@ -60,6 +60,11 @@ window.getBookinNgApp.controller('LocationCtrl', function ($scope, $http) {
     };
 
     $scope.selectLocation = function(locationId){
+        //Remove all bookings from session storage
+        if(sessionStorage.selectedTimeCourt){
+            sessionStorage.selectedTimeCourt = JSON.stringify([]);
+        }
+
         //Search array and return the first item of the result
         var location = $.grep($scope.locations, function(location){
             return location.id == locationId;
