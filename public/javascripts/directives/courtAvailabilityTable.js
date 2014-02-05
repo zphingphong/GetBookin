@@ -33,6 +33,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 //Retrieve user selections from session storage
                 if(sessionStorage.selectedTimeCourt){
                     selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
+                    $scope.$emit('selectedCourtsEmit');
                 }
 
                 var availability = {};

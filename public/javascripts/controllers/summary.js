@@ -9,16 +9,15 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($scope, $http) {
         $("html, body").animate({
             scrollTop: summaryContainer[0].offsetTop
         });
-        $scope.bookings = JSON.parse(sessionStorage.selectedTimeCourt);
-    });
 
-    if(sessionStorage.selectedTimeCourt){
-        $scope.bookings = JSON.parse(sessionStorage.selectedTimeCourt);
-        $scope.grandTotal = 0;
-        $.each($scope.bookings, function(index, booking){
-            $scope.grandTotal += booking.price;
-        });
-    }
+        if(sessionStorage.selectedTimeCourt){
+            $scope.bookings = JSON.parse(sessionStorage.selectedTimeCourt);
+            $scope.grandTotal = 0;
+            $.each($scope.bookings, function(index, booking){
+                $scope.grandTotal += booking.price;
+            });
+        }
+    });
 
     $scope.$on('selectedLocationBroadcast', function(event, args){
         $scope.locationName = args.location.name;

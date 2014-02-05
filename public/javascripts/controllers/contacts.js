@@ -8,6 +8,7 @@ window.getBookinNgApp.controller('ContactsCtrl', function ($scope, $http) {
         var contactInfo = JSON.parse(sessionStorage.contactInfo);
         $scope.name = contactInfo.contactName;
         $scope.phoneNo = contactInfo.contactNo;
+//        $scope.$emit('filledContactsEmit'); //TODO: Fix this. It doesn't work, since it happens before summary controller get initialized (I think).
     }
 
     $scope.$on('selectedCourtsBroadcast', function(event, args){
@@ -16,6 +17,7 @@ window.getBookinNgApp.controller('ContactsCtrl', function ($scope, $http) {
         $("html, body").animate({
             scrollTop: contactsContainer[0].offsetTop
         });
+
     });
 
     $scope.saveContactInfoAndViewSummary = function(){
