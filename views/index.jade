@@ -96,7 +96,7 @@ block mainContainer
     h1 Summary&nbsp;
       small Could you please confirm your booking at {{locationName}}?
     .well
-      table(class='table', id='summary-table')
+      table(class='table margin-top-bottom-small', id='summary-table')
         thead
           th Court No.
           th Date & Time
@@ -111,6 +111,9 @@ block mainContainer
               h4 Grand total
             td
               h4 {{grandTotal | currency:"$"}}
+      .row
+        div(class='col-sm-12 text-right')
+          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='confirmBooking()') Confirm Booking
 
 
 

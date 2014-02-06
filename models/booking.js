@@ -14,7 +14,12 @@ var bookingSchema = mongoose.Schema({
     courtNo: Number,
     dateTime: Date,
     contactName: String,
-    contactNo: String
+    contactNo: String,
+    contactEmail: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 var bookingModel = mongoose.model('Booking', bookingSchema);

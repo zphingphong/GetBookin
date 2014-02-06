@@ -22,5 +22,16 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($scope, $http) {
     $scope.$on('selectedLocationBroadcast', function(event, args){
         $scope.locationName = args.location.name;
     });
+
+    $scope.confirmBooking = function(){
+        $http.post('/booking', {
+            selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
+            contactInfo: JSON.parse(sessionStorage.contactInfo)
+        }).success(function(status){
+            if(status.success){
+                sessionStorage.selectedTimeCourt = JSON.stringify([]);
+            }
+        });
+    };
 });
 

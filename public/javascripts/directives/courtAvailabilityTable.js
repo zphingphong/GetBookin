@@ -33,7 +33,6 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 //Retrieve user selections from session storage
                 if(sessionStorage.selectedTimeCourt){
                     selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
-                    $scope.$emit('selectedCourtsEmit');
                 }
 
                 var availability = {};
@@ -181,20 +180,6 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                 sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
             };
-
-            $scope.confirmBooking = function(){
-                $http.post('/booking', {
-                    selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
-                    contactInfo: JSON.parse(sessionStorage.contactInfo)
-                }).success(function(status){
-                    if(status.success){
-//                        sessionStorage.selectedTimeCourt = JSON.stringify([]);
-                        $scope.refreshSchedule();
-                    }
-                });
-            };
-
-//            $scope.confirmBooking();
         },
         link: function(scope, element, attrs){
         }

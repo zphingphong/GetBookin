@@ -1,8 +1,7 @@
-
-/*
- * GET users listing.
+/**
+ * Created by ZoM on 05/02/14.
  */
 
-exports.list = function(req, res){
-  res.send("respond with a resource");
-};
+//Import all schemas
+var user = require('../models/user');
+
