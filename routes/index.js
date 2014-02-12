@@ -15,7 +15,7 @@ exports.partials = function (req, res) {
     res.render('partials/' + name);
 };
 
-exports.templates = function (req, res) {
+exports.pages = function (req, res) {
     var name = req.params.name;
-    res.render('templates/' + name);
+    res.render('pages/' + name);
 };

@@ -45,7 +45,7 @@ app.get('/booking', booking.searchBooking);
 
 //Views
 app.get('/partials/:name', routes.partials);
-app.get('/templates/:name', routes.templates);
+app.get('/pages/:name', routes.pages);
 
 //Locals
 app.locals.config = require('./public/config');

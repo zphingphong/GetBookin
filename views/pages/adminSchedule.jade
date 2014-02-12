@@ -1,14 +1,10 @@
-extends layout
-
+extends ../layoutAdmin
 block additionalCss
   link(rel='stylesheet', href='/stylesheets/index.css', type='text/css')
-
   // ---- jQuery & Plugins ----
   link(rel='stylesheet', href='/libraries/fancyBox/source/jquery.fancybox.css', type='text/css')
-
   // ---- Bootstrap & Plugins ----
   link(rel='stylesheet', href='libraries/BootstrapFormHelpers/dist/css/bootstrap-formhelpers.min.css', type='text/css')
-
 block mainContainer
   section(id='location-selection-container', ng-controller='LocationCtrl')
     h1 Location&nbsp;
@@ -55,7 +51,6 @@ block mainContainer
                       a(type='button', class='btn btn-success', ng-click='selectLocation(location.id)') Select
         div(class='col-sm-6 col-md-7')
           #location-map
-
   section(id='time-court-selection-container', class='section-spaced', ng-controller='TimeCourtSelectionCtrl')
     h1 Time & Court&nbsp;
       small When and which court do you want to book?
@@ -75,8 +70,6 @@ block mainContainer
       .row
         div(class='col-sm-12 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='bookSelectedCourts()') Book selected court(s)
-
-
   section(id='contacts-container', class='section-spaced', ng-controller='ContactsCtrl')
     h1 Contacts&nbsp;
       small How could we contact you?
@@ -91,7 +84,6 @@ block mainContainer
       .row
         div(class='col-sm-12 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='saveContactInfoAndViewSummary()') View Summary
-
   section(id='summary-container', class='section-spaced', ng-controller='SummaryCtrl')
     h1 Summary&nbsp;
       small Could you please confirm your booking at {{locationName}}?
@@ -114,11 +106,6 @@ block mainContainer
       .row
         div(class='col-sm-12 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='confirmBooking()') Confirm Booking
-
-
-
-
-
 block additionalJs
   //App JS
   script(src='javascripts/controllers/location.js')
@@ -128,15 +115,10 @@ block additionalJs
   script(src='javascripts/directives/courtImageSlider.js')
   script(src='javascripts/directives/courtAvailabilityTable.js')
   script(src='javascripts/page/index.js')
-
   // ---- jQuery & Plugins ----
   script(src='libraries/carouFredSel/jquery.carouFredSel-6.2.1-packed.js')
   script(src='libraries/carouFredSel/helper-plugins/jquery.mousewheel.min.js')
   script(src='libraries/carouFredSel/helper-plugins/jquery.touchSwipe.min.js')
   script(src='libraries/fancyBox/source/jquery.fancybox.pack.js')
-
   // ---- Bootstrap & Plugins ----
   script(src='libraries/BootstrapFormHelpers/dist/js/bootstrap-formhelpers.min.js')
-
-
-
