@@ -5,7 +5,7 @@
 window.getBookinNgApp.directive('courtAvailabilityTable', function(){
     return {
         restrict: 'E',
-        templateUrl: 'partials/courtAvailabilityTable',
+        templateUrl: '/partials/courtAvailabilityTable',
         controller: function($scope, $http) {
             //Private helper function to check if the court is open
             $scope.isOpen = function(todayHours, currentHour){

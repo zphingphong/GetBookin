@@ -21,15 +21,13 @@ html(ng-app='getBookin')
     nav(class='navbar navbar-default navbar-fixed-top', role='navigation')
       .navbar-header
       a.navbar-brand(href='/')
-        img(src='images/logo.png', alt='LOGO')
+        img(src='/images/logo.png', alt='LOGO')
       #main-navbar(class='collapse navbar-collapse')
         ul(class='nav navbar-nav')
           li
-            a(href='/') NEW BOOKING
+            a(href='/') COURT SCHEDULE
           li
-            a(href='/') MAKE CHANGE
-          li
-            a(href='/') CANCEL
+            a(href='/') SETTINGS
         ul(class='nav navbar-nav navbar-right')
           #main-navbar-signinwith SIGN IN WITH&nbsp;
             button(class='btn btn-default navbar-btn')
@@ -47,17 +45,14 @@ html(ng-app='getBookin')
     // ---- Bootstrap & Plugins ----
     script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
 
-    // ---- Google Map ----
-    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAo0HBa1d_xNIIwx1UksjPg50MQQbjLCjQ&sensor=true')
-
-    script(src='javascripts/global.js')
-    script(src='config.js')
+    script(src='/javascripts/global.js')
+    script(src='/config.js')
 
     // ---- Classes ----
-    script(src='javascripts/class/map.js')
+    script(src='/javascripts/class/map.js')
 
     // ---- Additional Libraries ----
-    script(src='libraries/moment/moment.min.js')
+    script(src='/libraries/moment/moment.min.js')
 
     block additionalJs
 
