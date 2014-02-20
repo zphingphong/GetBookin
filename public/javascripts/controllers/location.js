@@ -2,7 +2,7 @@
  * Created by ZoM on 03/12/13.
  */
 
-window.getBookinNgApp.controller('LocationCtrl', function ($scope, $http) {
+window.getBookinNgApp.controller('LocationCtrl', function ($rootScope, $scope, $http) {
     window.locationMapObj = new Map();
 
     $http.get('/location').success(function(locations) {
@@ -34,7 +34,7 @@ window.getBookinNgApp.controller('LocationCtrl', function ($scope, $http) {
                 $.each($scope.locations, function(index, selectedLocation){
                     if(selectedLocation._id == selectedTimeCourts[0].location){
                         selectedLocation.selected = true;
-                        $scope.$emit('selectedLocationEmit', {
+                        $rootScope.$emit('locationSelected', {
                             location: selectedLocation
                         });
                         return false;
@@ -69,7 +69,7 @@ window.getBookinNgApp.controller('LocationCtrl', function ($scope, $http) {
         var location = $.grep($scope.locations, function(location){
             return location.id == locationId;
         })[0];
-        $scope.$emit('selectedLocationEmit', {
+        $rootScope.$emit('locationSelected', {
             location: location
         });
     };

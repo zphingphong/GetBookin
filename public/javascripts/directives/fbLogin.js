@@ -9,14 +9,6 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
         link: function(scope, element, attrs){
         },
         controller: function($scope){
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId      : '640875779319763',
-                    status     : true, // check login status
-                    cookie     : true, // enable cookies to allow the server to access the session
-                    xfbml      : true  // parse XFBML
-                });
-            };
             $scope.login = function(){
                 FB.login(function(response) {
                     if (response.authResponse) {

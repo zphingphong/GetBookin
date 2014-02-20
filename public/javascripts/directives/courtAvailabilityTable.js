@@ -6,7 +6,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
     return {
         restrict: 'E',
         templateUrl: '/partials/courtAvailabilityTable',
-        controller: function($scope, $http) {
+        controller: function($rootScope, $scope, $http) {
             //Private helper function to check if the court is open
             $scope.isOpen = function(todayHours, currentHour){
                 //Closing hour is less than opening hour means (close <= selectedTime < open)
@@ -140,7 +140,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
             };
 
-            $scope.$on('selectedLocationBroadcast', function(event, args){
+            $rootScope.$on('locationSelected', function(event, args){
                 $scope.refreshSchedule(args.location);
             });
 

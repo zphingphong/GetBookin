@@ -2,7 +2,7 @@
  * Created by ZoM on 03/12/13.
  */
 
-window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $http) {
+window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope, $scope, $http) {
     $(function() {
         var dateInputContainer = $('#time-court-selection-date-input');
         var timeInputContainer = $('#time-court-selection-time-input');
@@ -11,7 +11,7 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
         $scope.currentDate = moment(dateInput.val(), 'YYYY-MM-DD').format('dddd, MMMM Do YYYY');
         $scope.currentTime = timeInput.val();
         $scope.locationName = '';
-        $scope.$on('selectedLocationBroadcast', function(event, args){
+        $rootScope.$on('locationSelected', function(event, args){
             $scope.locationName = args.location.name;
             var timeCourtSelectionContainer = $('#time-court-selection-container');
             timeCourtSelectionContainer.show();
@@ -36,7 +36,7 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($scope, $ht
     };
 
     $scope.bookSelectedCourts = function(){
-        $scope.$emit('selectedCourtsEmit');
+        $rootScope.$emit('courtSelected');
     };
 });
 

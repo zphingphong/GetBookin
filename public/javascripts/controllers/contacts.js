@@ -2,16 +2,16 @@
  * Created by ZoM on 03/12/13.
  */
 
-window.getBookinNgApp.controller('ContactsCtrl', function ($scope, $http) {
+window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope, $http) {
     //Retrieve user information from session storage
     if(sessionStorage.contactInfo){
         var contactInfo = JSON.parse(sessionStorage.contactInfo);
         $scope.name = contactInfo.contactName;
         $scope.phoneNo = contactInfo.contactNo;
-//        $scope.$emit('filledContactsEmit'); //TODO: Fix this. It doesn't work, since it happens before summary controller get initialized (I think).
+//        $rootScope.$emit('contactsFilled'); //TODO: Fix this. It doesn't work, since it happens before summary controller get initialized (I think).
     }
 
-    $scope.$on('selectedCourtsBroadcast', function(event, args){
+    $rootScope.$on('courtSelected', function(event, args){
         var contactsContainer = $('#contacts-container');
         contactsContainer.show();
         $("html, body").animate({
@@ -25,7 +25,7 @@ window.getBookinNgApp.controller('ContactsCtrl', function ($scope, $http) {
             contactName: $scope.name,
             contactNo: $scope.phoneNo
         });
-        $scope.$emit('filledContactsEmit');
+        $rootScope.$emit('contactsFilled');
     }
 
 
