@@ -18,6 +18,15 @@ address {
 .navbar-brand {
   padding: 4px 15px;
 }
+.text-orange {
+  color: #ed9c28;
+}
+.text-blue {
+  color: #2381ce;
+}
+.text-green {
+  color: #47a447;
+}
 .right {
   float: right;
 }
@@ -26,6 +35,9 @@ address {
 }
 .pad-medium {
   padding: 1em;
+}
+.pad-left-right-medium {
+  padding: 0 1em;
 }
 .pad-bottom-small {
   padding-bottom: 0.5em;

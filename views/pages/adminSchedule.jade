@@ -6,7 +6,10 @@ block additionalCss
 block mainContainer
   section(id='time-court-selection-container', ng-controller='TimeCourtSelectionCtrl')
     h1 Time & Court&nbsp;
-      small When and which court do you want to book?
+      small
+        span(class='text-blue pad-left-right-medium') Available
+        span(class='text-green pad-left-right-medium') Unpaid
+        span(class='text-orange pad-left-right-medium') Paid
     .well
       .row
         div(class='col-sm-5')

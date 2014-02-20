@@ -34,8 +34,7 @@ html(ng-app='getBookin')
           #main-navbar-signinwith SIGN IN WITH&nbsp;
             button(class='btn btn-default navbar-btn' onclick='window.location="/pages/adminSchedule";')
               i(class='fa fa-google-plus')
-            button(class='btn btn-default navbar-btn')
-              i(class='fa fa-facebook')
+            fblogin
     // -------- [END] Navbar --------
 
     block mainContainer
@@ -58,6 +57,9 @@ html(ng-app='getBookin')
 
     // ---- Additional Libraries ----
     script(src='libraries/moment/moment.min.js')
+
+    // ---- App JS ----
+    script(src='javascripts/directives/fbLogin.js')
 
     block additionalJs
 
