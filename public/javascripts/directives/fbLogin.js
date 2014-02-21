@@ -8,7 +8,7 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
         template: '<button class="btn btn-default navbar-btn" ng-click="login()"><i class="fa fa-facebook"></i></button>',
         link: function(scope, element, attrs){
         },
-        controller: function($scope){
+        controller: function($scope, $http){
             $scope.login = function(){
                 FB.login(function(response) {
                     if (response.authResponse) {
