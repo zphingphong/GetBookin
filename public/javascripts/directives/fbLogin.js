@@ -20,7 +20,10 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
                                 accountType: 'user'
                             }).success(function(response) {
                                 if(response.success){
-                                    console.log(response.user);
+                                    res.cookie('user', JSON.stringify(response.user), {
+                                        expires: moment().add('d', 2).toDate(),
+                                        secure: true
+                                    });
                                 }
                             });
                         });
