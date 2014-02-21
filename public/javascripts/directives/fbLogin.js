@@ -2,13 +2,13 @@
  * Created by ZoM on 20/02/14.
  */
 
-window.getBookinNgApp.directive('fblogin', function($timeout){
+window.getBookinNgApp.directive('fblogin', function(){
     return {
         restrict: 'AE',
         template: '<button class="btn btn-default navbar-btn" ng-click="login()"><i class="fa fa-facebook"></i></button>',
         link: function(scope, element, attrs){
         },
-        controller: function($scope, $http){
+        controller: function($rootScope, $scope, $http){
             $scope.login = function(){
                 FB.login(function(response) {
                     if (response.authResponse) {
@@ -20,10 +20,11 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
                                 accountType: 'user'
                             }).success(function(response) {
                                 if(response.success){
-                                    res.cookie('user', JSON.stringify(response.user), {
-                                        expires: moment().add('d', 2).toDate(),
-                                        secure: true
-                                    });
+                                    if(response.user.accountType == 'user'){
+                                        $rootScope.$emit('userLoggedIn', {
+                                            user: response.user
+                                        });
+                                    }
                                 }
                             });
                         });

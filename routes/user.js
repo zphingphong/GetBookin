@@ -9,6 +9,10 @@ exports.signIn = function(req, res){
 
     var loggedInCb = function(response){
         if(response.user){ // found a user
+            res.cookie('user', JSON.stringify(response.user), {
+                expires: moment().add('d', 2).toDate(),
+                secure: true
+            });
             res.send(response);
         } else { // create a new user
             user.create(req.body, function(response){
