@@ -9,9 +9,7 @@ window.getBookinNgApp.directive('fblogin', function(){
         link: function(scope, element, attrs){
         },
         controller: function($rootScope, $scope, $http, $cookies){
-            console.log($cookies.user);
             $scope.login = function(){
-                console.log($cookies.user);
                 FB.login(function(response) {
                     if (response.authResponse) {
                         FB.api('/me', function(response) {
