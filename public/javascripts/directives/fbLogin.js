@@ -8,7 +8,7 @@ window.getBookinNgApp.directive('fblogin', function(){
         template: '<button class="btn btn-default navbar-btn" ng-click="login()"><i class="fa fa-facebook"></i></button>',
         link: function(scope, element, attrs){
         },
-        controller: function($rootScope, $scope, $http){
+        controller: function($rootScope, $scope, $http, $cookies){
             $scope.login = function(){
                 FB.login(function(response) {
                     if (response.authResponse) {
@@ -20,6 +20,7 @@ window.getBookinNgApp.directive('fblogin', function(){
                                 accountType: 'user'
                             }).success(function(response) {
                                 if(response.success){
+                                    console.log($cookies.user);
                                     if(response.user.accountType == 'user'){
                                         $rootScope.$emit('userLoggedIn', {
                                             user: response.user
