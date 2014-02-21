@@ -18,10 +18,8 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
                         FB.api('/me', function(response) {
                             $http.post('/user', {
                                 name: response.name,
-                                phoneNo: null,
                                 email: response.email,
                                 facebookId: response.id,
-                                googleId: null,
                                 accountType: 'user'
                             }).success(function(response) {
                                 if(response.success){
