@@ -5,6 +5,9 @@
 //Import all schemas
 var user = require('../models/user');
 
+//Import libraries
+var moment = require('moment');
+
 exports.signIn = function(req, res){
 
     var loggedInCb = function(response){
