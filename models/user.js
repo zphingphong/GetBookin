@@ -28,9 +28,37 @@ exports.create = function(user, cb){
             });
         } else {
             cb({
-                success: true
+                success: true,
+                user: user
             });
         }
-    })
+    });
+};
+
+exports.retrieveByEmail = function(user, cb){
+    userModel.findOne({ 'email': user.email }, function (err, user) {
+        cb({
+            success: true,
+            user: user
+        });
+    });
+};
+
+exports.retrieveByEmailAndFacebookId = function(user, cb){
+    userModel.findOne({ 'email': user.email, 'facebookId': user.facebookId }, function (err, user) {
+        cb({
+            success: true,
+            user: user
+        });
+    });
+};
+
+exports.retrieveByEmailAndGoogleId = function(user, cb){
+    userModel.findOne({ 'email': user.email, 'googleId': user.googleId }, function (err, user) {
+        cb({
+            success: true,
+            user: user
+        });
+    });
 };
 

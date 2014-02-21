@@ -6,10 +6,29 @@
 var user = require('../models/user');
 
 exports.signIn = function(req, res){
-    console.log('-----------------------------------------');
-    console.log(req.body);
-    user.create(req.body, function(response){
-        res.send(response);
-    });
+
+    var loggedInCb = function(response){
+        if(response.user){ // found a user
+            res.send(response);
+        } else { // create a new user
+            user.create(req.body, function(response){
+                res.send(response);
+            });
+        }
+    };
+
+    // Facebook sign in
+    if(req.body.facebookId){
+        user.retrieveByEmailAndFacebookId(req.body, loggedInCb);
+    } else if(req.body.googleId) {
+        user.retrieveByEmailAndGoogleId(req.body, loggedInCb);
+    } else {
+        res.send({
+            success: false,
+            error: 'Logging in with invalid id.',
+            errorCode: ERROR_LOGIN_FAILURE
+        });
+    }
+
 };
 

@@ -12,9 +12,6 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
             $scope.login = function(){
                 FB.login(function(response) {
                     if (response.authResponse) {
-                        access_token = response.authResponse.accessToken; //get access token
-                        user_id = response.authResponse.userID; //get FB UID
-
                         FB.api('/me', function(response) {
                             $http.post('/user', {
                                 name: response.name,
@@ -23,7 +20,7 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
                                 accountType: 'user'
                             }).success(function(response) {
                                 if(response.success){
-                                    response.accountType;
+                                    console.log(response.user);
                                 }
                             });
                         });
