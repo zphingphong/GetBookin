@@ -12,14 +12,22 @@ window.getBookinNgApp.directive('fblogin', function($timeout){
             $scope.login = function(){
                 FB.login(function(response) {
                     if (response.authResponse) {
-                        console.log('Welcome!  Fetching your information.... ');
-                        console.log(response); // dump complete info
                         access_token = response.authResponse.accessToken; //get access token
                         user_id = response.authResponse.userID; //get FB UID
 
                         FB.api('/me', function(response) {
-                            user_email = response.email; //get user email
-                            // you can store this data into your database
+                            $http.post('/user', {
+                                name: response.name,
+                                phoneNo: null,
+                                email: response.email,
+                                facebookId: response.id,
+                                googleId: null,
+                                accountType: 'user'
+                            }).success(function(response) {
+                                if(response.success){
+                                    response.accountType;
+                                }
+                            });
                         });
 
                     } else {
