@@ -42,7 +42,7 @@ app.get('/location', location.location);
 app.get('/schedule/:datetime', location.scheduleByDateTime);
 app.post('/booking', booking.book);
 app.get('/booking', booking.searchBooking);
-app.post('/user', booking.signIn);
+app.post('/user', user.signIn);
 
 //Views
 app.get('/partials/:name', routes.partials);
