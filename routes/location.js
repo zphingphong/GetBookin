@@ -12,6 +12,12 @@ exports.location = function(req, res){
     });
 };
 
+exports.retrieveByAdmin = function(req, res){
+    location.retrieveByAdmin(req.user, function(locations){
+        res.send(locations);
+    });
+};
+
 exports.scheduleByDateTime = function(req, res){
     location.getScheduleByDateTime(req, res, function(schedule){
         res.send(schedule);

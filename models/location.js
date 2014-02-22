@@ -37,7 +37,11 @@ var locationSchema = mongoose.Schema({
     pricingPattern: String,
     pricingFlat: Number,
     pricingDay: [Number],
-    courtCount: Number
+    courtCount: Number,
+    admins: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 });
 
 var locationModel = mongoose.model('Location', locationSchema);
@@ -56,6 +60,19 @@ exports.retrieveAll = function(req, res, cb){
 };
 
 exports.retrieveByAddress = function(req, res, cb){
+};
+
+exports.retrieveByAdmin = function(admin, cb){
+    locationModel.find({
+        admins : { $in: [admin._id] }
+    }, function (err, locations) {
+        if(err){
+            console.error('Cannot retrieve location from database, error: ');
+            console.error(err);
+        } else {
+            cb(locations);
+        }
+    });
 };
 
 exports.getScheduleByDateTime = function(req, res, cb){

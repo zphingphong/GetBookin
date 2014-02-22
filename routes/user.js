@@ -4,6 +4,7 @@
 
 //Import all schemas
 var user = require('../models/user');
+var location = require('../models/location');
 
 //Import libraries
 var moment = require('moment');
@@ -17,7 +18,21 @@ exports.signIn = function(req, res){
                 domain: '.getbookin.com'
 //                secure: true
             });
-            res.send(response);
+
+            // Get and response with an array of locations, if the user is an admin
+            if(response.user.accountType == 'admin'){
+                location.retrieveByAdmin(response.user, function(locations){
+                    res.cookie('locations', JSON.stringify(locations), {
+                        expires: moment().add('d', 2).toDate(),
+                        domain: '.getbookin.com'
+                    });
+
+                    response.locations = locations;
+                    res.send(response);
+                });
+            } else {
+                res.send(response);
+            }
         } else { // create a new user
             user.create(req.body, function(response){
                 res.send(response);
