@@ -8,7 +8,7 @@ window.getBookinNgApp.directive('fblogin', function(){
         template: '<button class="btn btn-default navbar-btn" ng-click="login()"><i class="fa fa-facebook"></i></button>',
         link: function(scope, element, attrs){
         },
-        controller: function($rootScope, $scope, $http, $cookies, $location){
+        controller: function($rootScope, $scope, $http, $cookies, $window){
             $scope.login = function(){
                 FB.login(function(response) {
                     if (response.authResponse) {
@@ -26,7 +26,7 @@ window.getBookinNgApp.directive('fblogin', function(){
                                             user: response.user
                                         });
                                     } else if(response.user.accountType == 'admin'){
-                                        $location.path('/pages/adminSchedule');
+                                        $window.location.href = '/pages/adminSchedule';
                                     }
                                 }
                             });
