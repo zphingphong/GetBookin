@@ -14,8 +14,8 @@ exports.signIn = function(req, res){
     var loggedInCb = function(response){
         if(response.user){ // found a user
             res.cookie('user', JSON.stringify(response.user), {
-                expires: moment().add('d', 2).toDate(),
-                domain: '.getbookin.com'
+                expires: moment().add('d', 2).toDate()
+//                domain: '.getbookin.com'
 //                secure: true
             });
 
@@ -23,8 +23,8 @@ exports.signIn = function(req, res){
             if(response.user.accountType == 'admin'){
                 location.retrieveByAdmin(response.user, function(locations){
                     res.cookie('locations', JSON.stringify(locations), {
-                        expires: moment().add('d', 2).toDate(),
-                        domain: '.getbookin.com'
+                        expires: moment().add('d', 2).toDate()
+//                        domain: '.getbookin.com'
                     });
 
                     response.locations = locations;

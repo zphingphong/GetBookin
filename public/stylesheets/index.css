@@ -79,6 +79,19 @@ nav {
 #location-selection-container a:hover {
   text-decoration: none;
 }
+#time-court-selection-table td {
+  padding: 0;
+}
+#time-court-selection-table td button {
+  width: 100%;
+  border-radius: 0;
+}
+#time-court-selection-table td.court-selection-label {
+  vertical-align: middle;
+}
+#time-court-selection-table th {
+  text-align: center;
+}
 .court-images-container {
   text-align: center;
 }
@@ -100,21 +113,6 @@ a.court-image-link {
 section#time-court-selection-container {
   display: none;
 }
-/* ---- [START] Court availability table ---- */
-#time-court-selection-table td {
-  padding: 0;
-}
-#time-court-selection-table td button {
-  width: 100%;
-  border-radius: 0;
-}
-#time-court-selection-table td.court-selection-label {
-  vertical-align: middle;
-}
-#time-court-selection-table th {
-  text-align: center;
-}
-/* ---- [END] Court availability table ---- */
 section#contacts-container {
   display: none;
 }

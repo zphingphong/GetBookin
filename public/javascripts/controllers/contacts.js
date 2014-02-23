@@ -2,7 +2,7 @@
  * Created by ZoM on 03/12/13.
  */
 
-window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope, $http) {
+window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope) {
     //Retrieve user information from session storage
     if(sessionStorage.contactInfo){
         var contactInfo = JSON.parse(sessionStorage.contactInfo);

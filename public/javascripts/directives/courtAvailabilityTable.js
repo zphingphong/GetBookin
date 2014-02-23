@@ -26,8 +26,6 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
             $scope.refreshSchedule = function(location) {
 
-                console.log($cookies.user);
-
                 var selectedTimeCourts = [];
                 var dateInput = $('#time-court-selection-date-input');
                 var timeInput = $('#time-court-selection-time-input');
@@ -141,6 +139,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 });
 
             };
+
+            if($rootScope.user.accountType == 'admin'){
+                $scope.refreshSchedule($rootScope.locations[0]);
+            }
 
             $rootScope.$on('locationSelected', function(event, args){
                 $scope.refreshSchedule(args.location);
