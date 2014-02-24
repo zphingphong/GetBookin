@@ -3,10 +3,15 @@
  */
 
 window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope, $scope, $cookies) {
-    $rootScope.user = JSON.parse($cookies.user);
-    if($rootScope.user.accountType == 'admin'){
-        $rootScope.locations = JSON.parse($cookies.locations);
+    if($cookies.user){
+        $rootScope.user = JSON.parse($cookies.user);
+        if($rootScope.user.accountType == 'admin'){
+            $rootScope.locations = JSON.parse($cookies.locations);
+        }
+    } else {
+        $rootScope.user = null;
     }
+
     $(function() {
         var dateInputContainer = $('#time-court-selection-date-input');
         var timeInputContainer = $('#time-court-selection-time-input');
@@ -14,7 +19,7 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope,
         var timeInput = timeInputContainer.find('input');
         $scope.currentDate = moment(dateInput.val(), 'YYYY-MM-DD').format('dddd, MMMM Do YYYY');
         $scope.currentTime = timeInput.val();
-        $scope.locationName = $rootScope.locations[0] ? $rootScope.locations[0].name : '';
+        $scope.locationName = ($rootScope.locations && $rootScope.locations[0]) ? $rootScope.locations[0].name : '';
         $rootScope.$on('locationSelected', function(event, args){
             $scope.locationName = args.location.name;
             var timeCourtSelectionContainer = $('#time-court-selection-container');

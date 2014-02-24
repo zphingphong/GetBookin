@@ -8,7 +8,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
         templateUrl: '/partials/courtAvailabilityTable',
         controller: function($rootScope, $scope, $http, $window) {
 
-            if($rootScope.user.accountType == 'admin' && $window.location.pathname == '/pages/adminSchedule'){
+            if($rootScope.user && $rootScope.user.accountType == 'admin' && $window.location.pathname == '/pages/adminSchedule'){
                 $scope.isAdmin = true;
             } else {
                 $scope.isAdmin = false;
@@ -89,7 +89,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     params: {
                         startDateTime: moment(todayDate).hour(0).format('YYYY-MM-DD hA'),
                         endDateTime: moment(todayDate).add('h', 47).format('YYYY-MM-DD hA'),
-                        location: $scope.selectedLocation._id
+                        location: $scope.selectedLocation._id,
+                        accountType: $rootScope.user ? $rootScope.user.accountType : null
                     }
                 }).success(function(bookings) {
                     for (var iTime = currentHour - halfDisplayCount; iTime < currentHour + halfDisplayCount; iTime++) {
@@ -155,7 +156,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
             };
 
-            if($rootScope.user.accountType == 'admin'){
+            if($rootScope.user && $rootScope.user.accountType == 'admin'){
                 $scope.refreshSchedule($rootScope.locations[0]);
             }
 
