@@ -11,10 +11,12 @@ var moment = require('moment');
 exports.book = function(req, res){
     var bookings = req.body.selectedTimeCourt;
     var contactInfo = req.body.contactInfo;
+    var paid = req.body.paid;
     bookings.forEach(function(booking, index, bookings){
         booking.contactName = contactInfo.contactName;
         booking.contactNo = contactInfo.contactNo;
         booking.dateTime = moment(booking.dateTime, 'YYYY-MM-DD hA').toDate();
+        booking.paid = paid;
     });
 
     booking.book(bookings, function(status){

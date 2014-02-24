@@ -19,7 +19,8 @@ var bookingSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    paid: String
 });
 
 var bookingModel = mongoose.model('Booking', bookingSchema);

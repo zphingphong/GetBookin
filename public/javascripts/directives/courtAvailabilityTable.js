@@ -6,7 +6,14 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
     return {
         restrict: 'E',
         templateUrl: '/partials/courtAvailabilityTable',
-        controller: function($rootScope, $scope, $http, $cookies) {
+        controller: function($rootScope, $scope, $http, $window) {
+
+            if($rootScope.user.accountType == 'admin' && $window.location.pathname == '/pages/adminSchedule'){
+                $scope.isAdmin = true;
+            } else {
+                $scope.isAdmin = false;
+            }
+
             //Private helper function to check if the court is open
             $scope.isOpen = function(todayHours, currentHour){
                 //Closing hour is less than opening hour means (close <= selectedTime < open)
@@ -130,7 +137,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                             availability.courts[courtNo].push({
                                 isAvailable: existingBookings.length > 0 ? false : true,
                                 price: currentPrice,
-                                selected: isSelected
+                                selected: isSelected,
+                                paid: existingBookings.length > 0 ? existingBookings[0].paid : null
                             });
                         }
                     }

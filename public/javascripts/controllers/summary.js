@@ -26,7 +26,8 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
     $scope.confirmBooking = function(){
         $http.post('/booking', {
             selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
-            contactInfo: JSON.parse(sessionStorage.contactInfo)
+            contactInfo: JSON.parse(sessionStorage.contactInfo),
+            paid: 'full'
         }).success(function(status){
             if(status.success){
                 sessionStorage.selectedTimeCourt = JSON.stringify([]);
