@@ -57,12 +57,20 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                 //If the court is closed, show next day schedule
                 if (!isOpen) {
-                    todayDay++; //Move to next day
-                    if(todayDay == 7){ //If last day of week (sat), reset it
-                        todayDay = 0;
+                    if(currentHour > todayHours.open){
+                        todayDay++; //Move to next day
+                        todayDate.add('d', 1); //Move to the next date
+                        if(todayDay == 7){ //If last day of week (sat), reset it
+                            todayDay = 0;
+                        }
+                        todayHours = hours[todayDay];
                     }
-                    todayHours = hours[todayDay];
+
                     currentHour = todayHours.open + halfDisplayCount;
+                } else { // It's currently open, but a few hours before it that are showing on the table are close
+                    if(!$scope.isOpen(todayHours, currentHour - halfDisplayCount)){
+                        currentHour = todayHours.open + halfDisplayCount;
+                    }
                 }
 
                 //Check pricing scheme
@@ -84,7 +92,6 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                         location: $scope.selectedLocation._id
                     }
                 }).success(function(bookings) {
-                    todayDate.hour(currentHour - halfDisplayCount);
                     for (var iTime = currentHour - halfDisplayCount; iTime < currentHour + halfDisplayCount; iTime++) {
 
                         //If closed, run to the next day
