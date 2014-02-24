@@ -27,6 +27,9 @@ address {
 .text-green {
   color: #47a447;
 }
+.text-black {
+  color: #000;
+}
 .right {
   float: right;
 }

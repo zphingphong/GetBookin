@@ -16,5 +16,5 @@ table(class='table table-hover', id='time-court-selection-table')
           span(, ng-class='{"glyphicon glyphicon-unchecked" : !courtInfo.selected, "glyphicon glyphicon-check" : courtInfo.selected}')
           //|  {{courtInfo.isAvailable}}
           |  {{courtInfo.price | currency:"$"}}
-        div(ng-if='!courtInfo.isAvailable && isAdmin', ng-class='{"btn btn-success" : courtInfo.paid == "full", "btn btn-info" : courtInfo.paid == "none"}')
+        button(type='button', ng-if='!courtInfo.isAvailable && isAdmin', ng-click='', ng-class='{"btn btn-default" : courtInfo.paid, "btn btn-warning" : courtInfo.none}')
           |  booked
