@@ -62,6 +62,9 @@ address {
 .full-width {
   width: 100%;
 }
+.capitalize {
+  text-transform: capitalize;
+}
 nav {
   padding: 0 0 0 0.5em;
 }

@@ -144,6 +144,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                             availability.courts[courtNo].push({
                                 isAvailable: existingBookings.length > 0 ? false : true,
+                                booking: existingBookings[0],
                                 price: currentPrice,
                                 selected: isSelected,
                                 paid: existingBookings.length > 0 ? existingBookings[0].paid : null
@@ -200,6 +201,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                 sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
             };
+
+            $scope.showBookingInfo = function(booking){
+                $scope.bookingInfo = booking;
+            }
         },
         link: function(scope, element, attrs){
         }
