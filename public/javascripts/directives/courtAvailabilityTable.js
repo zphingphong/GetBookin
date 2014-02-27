@@ -205,6 +205,12 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
             $scope.showBookingInfo = function(booking){
                 $scope.bookingInfo = booking;
             }
+
+            $rootScope.$on('bookingStored', function(event){
+                if($scope.isAdmin){
+                    $scope.refreshSchedule();
+                }
+            });
         },
         link: function(scope, element, attrs){
         }
