@@ -33,8 +33,7 @@ html(ng-app='getBookin')
             a(href='/') CANCEL
         ul(class='nav navbar-nav navbar-right')
           #main-navbar-signinwith SIGN IN WITH&nbsp;
-            button(class='btn btn-default navbar-btn' onclick='window.location="/pages/adminSchedule";')
-              i(class='fa fa-google-plus')
+            glogin
             fblogin
     // -------- [END] Navbar --------
 
@@ -61,6 +60,7 @@ html(ng-app='getBookin')
 
     // ---- App JS ----
     script(src='javascripts/directives/fbLogin.js')
+    script(src='javascripts/directives/gLogin.js')
 
     block additionalJs
 
