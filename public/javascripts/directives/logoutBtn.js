@@ -26,6 +26,7 @@ window.getBookinNgApp.directive('logoutbtn', function(){
                 delete $cookies['user'];
                 if($rootScope.user.accountType == 'admin'){
                     delete $cookies['location'];
+                    $window.location.href = '/';
                 }
                 $rootScope.user = null;
             }
