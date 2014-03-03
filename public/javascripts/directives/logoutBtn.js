@@ -12,13 +12,18 @@ window.getBookinNgApp.directive('logoutbtn', function(){
             $scope.logout = function(){
                 delete $cookies['user'];
                 if($rootScope.user.facebookId){ // Sign out from Facebook
-                    FB.logout();
+                    FB.logout(function(){
+                        if($rootScope.user.accountType == 'admin'){
+                            delete $cookies['location'];
+                            $window.location.href = '/';
+                        }
+                    });
                 } else if($rootScope.user.googleId) {// Sign out from Google
                     gapi.auth.signOut();
-                }
-                if($rootScope.user.accountType == 'admin'){
-                    delete $cookies['location'];
-                    $window.location.href = '/';
+                    if($rootScope.user.accountType == 'admin'){
+                        delete $cookies['location'];
+                        $window.location.href = '/';
+                    }
                 }
                 $rootScope.user = null;
             }
