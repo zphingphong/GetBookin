@@ -14,7 +14,8 @@ exports.signIn = function(req, res){
     var loggedInCb = function(response){
         if(response.user){ // found a user
             res.cookie('user', JSON.stringify(response.user), {
-                expires: moment().add('d', 2).toDate()
+                expires: moment().add('d', 2).toDate(),
+                path: '/'
 //                domain: '.getbookin.com'
 //                secure: true
             });

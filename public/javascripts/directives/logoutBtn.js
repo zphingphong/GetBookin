@@ -31,7 +31,7 @@ window.getBookinNgApp.directive('logoutbtn', function(){
                 delete $cookies['user'];
                 if($rootScope.user.accountType == 'admin'){
                     delete $cookies['locations'];
-//                    $window.location.href = '/';
+                    $window.location.href = '/';
                 }
                 $rootScope.user = null;
             }
