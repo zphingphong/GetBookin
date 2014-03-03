@@ -10,23 +10,30 @@ window.getBookinNgApp.directive('logoutbtn', function(){
         },
         controller: function($rootScope, $scope, $cookies, $window){
             $scope.logout = function(){
+//                delete $cookies['user'];
+//                if($rootScope.user.facebookId){ // Sign out from Facebook
+//                    FB.logout(function(){
+//                        if($rootScope.user.accountType == 'admin'){
+//                            delete $cookies['location'];
+//                            $window.location.href = '/';
+//                        }
+//                        $rootScope.user = null;
+//                    });
+//                } else if($rootScope.user.googleId) {// Sign out from Google
+//                    gapi.auth.signOut();
+//                    if($rootScope.user.accountType == 'admin'){
+//                        delete $cookies['location'];
+//                        $window.location.href = '/';
+//                    }
+//                    $rootScope.user = null;
+//                }
+
                 delete $cookies['user'];
-                if($rootScope.user.facebookId){ // Sign out from Facebook
-                    FB.logout(function(){
-                        if($rootScope.user.accountType == 'admin'){
-                            delete $cookies['location'];
-                            $window.location.href = '/';
-                        }
-                        $rootScope.user = null;
-                    });
-                } else if($rootScope.user.googleId) {// Sign out from Google
-                    gapi.auth.signOut();
-                    if($rootScope.user.accountType == 'admin'){
-                        delete $cookies['location'];
-                        $window.location.href = '/';
-                    }
-                    $rootScope.user = null;
+                if($rootScope.user.accountType == 'admin'){
+                    delete $cookies['location'];
+                    $window.location.href = '/';
                 }
+                $rootScope.user = null;
             }
         }
     }
