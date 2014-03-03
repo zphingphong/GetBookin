@@ -17,6 +17,7 @@ window.getBookinNgApp.directive('logoutbtn', function(){
                             delete $cookies['location'];
                             $window.location.href = '/';
                         }
+                        $rootScope.user = null;
                     });
                 } else if($rootScope.user.googleId) {// Sign out from Google
                     gapi.auth.signOut();
@@ -24,8 +25,8 @@ window.getBookinNgApp.directive('logoutbtn', function(){
                         delete $cookies['location'];
                         $window.location.href = '/';
                     }
+                    $rootScope.user = null;
                 }
-                $rootScope.user = null;
             }
         }
     }
