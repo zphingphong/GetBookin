@@ -71,10 +71,10 @@ nav {
 .login-status-container {
   background-color: #ed9c28;
   color: #fff;
+  padding: 0 15px;
 }
 #main-navbar-signinwith {
   height: 50px;
-  padding: 0 15px;
 }
 #main-navbar-signinwith button {
   padding: 2px 6px;

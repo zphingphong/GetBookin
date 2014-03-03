@@ -30,7 +30,9 @@ html(ng-app='getBookin')
           li
             a(href='/') SETTINGS
         ul(class='nav navbar-nav navbar-right')
-          #main-navbar-signinwith Location
+          div(ng-if='user != null')
+            strong {{user.email}}&nbsp;
+            logoutbtn
     // -------- [END] Navbar --------
 
     block mainContainer
@@ -50,6 +52,8 @@ html(ng-app='getBookin')
 
     // ---- Additional Libraries ----
     script(src='/libraries/moment/moment.min.js')
+
+    script(src='javascripts/directives/logoutBtn.js')
 
     block additionalJs
 
