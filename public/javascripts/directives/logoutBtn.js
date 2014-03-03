@@ -11,20 +11,18 @@ window.getBookinNgApp.directive('logoutbtn', function(){
         controller: function($rootScope, $scope, $cookies, $window){
             var logUserOut = function(){
                 delete $cookies['user'];
+                $rootScope.user = null;
                 if($rootScope.user.accountType == 'admin'){
                     delete $cookies['location'];
                     $window.location.href = '/';
                 }
-                $rootScope.user = null;
             };
 
             $scope.logout = function(){
+                logUserOut();
                 if($rootScope.user.facebookId){ // Sign out from Facebook
-                    FB.logout(function(response) {
-                        logUserOut();
-                    });
+                    FB.logout();
                 } else if($rootScope.user.googleId) {// Sign out from Google
-                    logUserOut();
                     gapi.auth.signOut();
                 }
             }
