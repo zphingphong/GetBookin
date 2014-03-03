@@ -37,6 +37,7 @@ window.getBookinNgApp.directive('fblogin', function(){
                             }).success(function(response) {
                                 if(response.success){
                                     console.log($cookies.user);
+                                    $rootScope.user = response.user;
                                     if(response.user.accountType == 'user'){
                                         $rootScope.$emit('userLoggedIn', {
                                             user: response.user

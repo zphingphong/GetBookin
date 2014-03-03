@@ -25,6 +25,7 @@ window.getBookinNgApp.directive('glogin', function(){
                                         accountType: 'user'
                                     }).success(function(response) {
                                         if(response.success){
+                                            $rootScope.user = response.user;
                                             if(response.user.accountType == 'user'){
                                                 $rootScope.$emit('userLoggedIn', {
                                                     user: response.user

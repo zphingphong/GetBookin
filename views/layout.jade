@@ -44,7 +44,7 @@ html(ng-app='getBookin')
           li
             a(href='/') CANCEL
         ul(class='nav navbar-nav navbar-right')
-          #main-navbar-signinwith SIGN IN WITH&nbsp;
+          #main-navbar-signinwith(ng-if='user == null') SIGN IN WITH&nbsp;
             glogin
             fblogin
     // -------- [END] Navbar --------
