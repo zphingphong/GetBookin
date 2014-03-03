@@ -12,7 +12,7 @@ window.getBookinNgApp.directive('glogin', function(){
             $scope.gLogin = function(){
                 gapi.auth.signIn({
                     'callback': function(authResult){
-                        if (authResult.status.signed_in == 'true') {
+                        if (authResult.status.signed_in == true) {
                             gapi.client.load('plus','v1', function(){
                                 var request = gapi.client.plus.people.get({
                                     'userId': 'me'
