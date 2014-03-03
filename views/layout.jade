@@ -43,10 +43,13 @@ html(ng-app='getBookin')
             a(href='/') MAKE CHANGE
           li
             a(href='/') CANCEL
-        ul(class='nav navbar-nav navbar-right')
+        ul(class='nav navbar-nav navbar-right login-status-container')
           #main-navbar-signinwith(ng-if='user == null') SIGN IN WITH&nbsp;
             glogin
             fblogin
+          div(ng-if='user != null')
+            strong {{user.email}}
+            logoutbtn
     // -------- [END] Navbar --------
 
     block mainContainer
@@ -67,6 +70,7 @@ html(ng-app='getBookin')
     // ---- App JS ----
     script(src='javascripts/directives/fbLogin.js')
     script(src='javascripts/directives/gLogin.js')
+    script(src='javascripts/directives/logoutBtn.js')
 
     block additionalJs
 

@@ -68,10 +68,12 @@ address {
 nav {
   padding: 0 0 0 0.5em;
 }
-#main-navbar-signinwith {
+.login-status-container {
   background-color: #ed9c28;
-  height: 50px;
   color: #fff;
+}
+#main-navbar-signinwith {
+  height: 50px;
   padding: 0 15px;
 }
 #main-navbar-signinwith button {
