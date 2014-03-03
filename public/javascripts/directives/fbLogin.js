@@ -5,11 +5,11 @@
 window.getBookinNgApp.directive('fblogin', function(){
     return {
         restrict: 'AE',
-        template: '<button class="btn btn-default navbar-btn" ng-click="login()"><i class="fa fa-facebook"></i></button>',
+        template: '<button class="btn btn-default navbar-btn" ng-click="fbLogin()"><i class="fa fa-facebook"></i></button>',
         link: function(scope, element, attrs){
         },
         controller: function($rootScope, $scope, $http, $cookies, $window){
-            $scope.login = function(){
+            $scope.fbLogin = function(){
 //                $http.post('/user', {
 //                    email: 'zphing_phong@hotmail.com',
 //                    facebookId: '100000482444229'

@@ -5,11 +5,16 @@
 window.getBookinNgApp.directive('glogin', function(){
     return {
         restrict: 'AE',
-        template: '<button class="btn btn-default navbar-btn" ng-click="login()"><i class="fa fa-google-plus"></i></button>',
+        template: '<button class="btn btn-default navbar-btn" ng-click="gLogin()"><i class="fa fa-google-plus"></i></button>',
         link: function(scope, element, attrs){
         },
         controller: function($rootScope, $scope, $http, $cookies, $window){
-            $scope.login = function(){
+            $scope.gLogin = function(){
+                gapi.auth.signIn({
+                    'callback': function(authResult){
+                        console.log(authResult);
+                    }
+                });
             }
         }
     }

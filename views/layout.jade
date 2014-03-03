@@ -1,6 +1,13 @@
 doctype html
+
 html(ng-app='getBookin')
   head
+
+    meta(name='google-signin-clientid', content='21530040744-3f1n0im8jkkac6ivjdb9rfdtqetrin85.apps.googleusercontent.com')
+    meta(name='google-signin-scope', content='https://www.googleapis.com/auth/plus.login')
+    meta(name='google-signin-requestvisibleactions', content='http://schemas.google.com/AddActivity')
+    meta(name='google-signin-cookiepolicy', content='single_host_origin')
+
     title= title
 
     // ---- Bootstrap & Plugins ----
@@ -12,6 +19,11 @@ html(ng-app='getBookin')
     // ---- AngularJS & Plugins ----
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js')
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-cookies.min.js')
+
+    // ---- jQuery & Plugins ----
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+
+    script(src='javascripts/global.js')
 
     block additionalCss
 
@@ -39,17 +51,11 @@ html(ng-app='getBookin')
 
     block mainContainer
 
-    // ---- jQuery & Plugins ----
-    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-
-
     // ---- Bootstrap & Plugins ----
     script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
 
     // ---- Google Map ----
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAo0HBa1d_xNIIwx1UksjPg50MQQbjLCjQ&sensor=true')
-
-    script(src='javascripts/global.js')
     script(src='config.js')
 
     // ---- Classes ----
