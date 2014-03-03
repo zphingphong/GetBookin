@@ -14,7 +14,7 @@ window.getBookinNgApp.directive('logoutbtn', function(){
 //                if($rootScope.user.facebookId){ // Sign out from Facebook
 //                    FB.logout(function(){
 //                        if($rootScope.user.accountType == 'admin'){
-//                            delete $cookies['location'];
+//                            delete $cookies['locations'];
 //                            $window.location.href = '/';
 //                        }
 //                        $rootScope.user = null;
@@ -22,7 +22,7 @@ window.getBookinNgApp.directive('logoutbtn', function(){
 //                } else if($rootScope.user.googleId) {// Sign out from Google
 //                    gapi.auth.signOut();
 //                    if($rootScope.user.accountType == 'admin'){
-//                        delete $cookies['location'];
+//                        delete $cookies['locations'];
 //                        $window.location.href = '/';
 //                    }
 //                    $rootScope.user = null;
@@ -30,8 +30,8 @@ window.getBookinNgApp.directive('logoutbtn', function(){
 
                 delete $cookies['user'];
                 if($rootScope.user.accountType == 'admin'){
-                    delete $cookies['location'];
-                    $window.location.href = '/';
+                    delete $cookies['locations'];
+//                    $window.location.href = '/';
                 }
                 $rootScope.user = null;
             }
