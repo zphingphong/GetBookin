@@ -24,6 +24,9 @@ window.getBookinNgApp.directive('logoutbtn', function(){
 //                    gapi.auth.signOut();
 //                }
                 delete $cookies['user'];
+                if($rootScope.user.accountType == 'admin'){
+                    delete $cookies['location'];
+                }
                 $rootScope.user = null;
             }
         }
