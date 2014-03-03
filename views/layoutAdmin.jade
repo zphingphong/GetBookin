@@ -14,6 +14,11 @@ html(ng-app='getBookin')
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-cookies.min.js')
     //script(src='http://code.angularjs.org/1.2.4/angular-route.min.js')
 
+    // ---- jQuery & Plugins ----
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+
+    script(src='/javascripts/global.js')
+
     block additionalCss
 
   body
@@ -37,14 +42,10 @@ html(ng-app='getBookin')
 
     block mainContainer
 
-    // ---- jQuery & Plugins ----
-    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-
 
     // ---- Bootstrap & Plugins ----
     script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
 
-    script(src='/javascripts/global.js')
     script(src='/config.js')
 
     // ---- Classes ----
@@ -53,7 +54,7 @@ html(ng-app='getBookin')
     // ---- Additional Libraries ----
     script(src='/libraries/moment/moment.min.js')
 
-    script(src='javascripts/directives/logoutBtn.js')
+    script(src='/javascripts/directives/logoutBtn.js')
 
     block additionalJs
 
