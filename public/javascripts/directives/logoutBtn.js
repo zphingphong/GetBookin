@@ -9,16 +9,22 @@ window.getBookinNgApp.directive('logoutbtn', function(){
         link: function(scope, element, attrs){
         },
         controller: function($rootScope, $scope, $cookies, $window){
+//            var logUserOut = function(){
+//                delete $cookies['user'];
+//                $rootScope.user = null;
+//            };
+
             $scope.logout = function(){
-                if($rootScope.user.facebookId){ // Sign out from Facebook
-                    FB.logout(function(response) {
-                        console.log(response);
-                        delete $cookies['user'];
-                    });
-                } else if($rootScope.user.googleId) {// Sign out from Google
-                    delete $cookies['user'];
-                    gapi.auth.signOut();
-                }
+//                if($rootScope.user.facebookId){ // Sign out from Facebook
+//                    FB.logout(function(response) {
+//                        logUserOut();
+//                    });
+//                } else if($rootScope.user.googleId) {// Sign out from Google
+//                    logUserOut();
+//                    gapi.auth.signOut();
+//                }
+                delete $cookies['user'];
+                $rootScope.user = null;
             }
         }
     }
