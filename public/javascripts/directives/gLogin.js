@@ -20,9 +20,9 @@ window.getBookinNgApp.directive('glogin', function(){
                                 request.execute(function(response) {
                                     console.log(response);
 //                                    $http.post('/user', {
-//                                        name: response.name,
+//                                        name: response.displayName,
 //                                        email: response.email,
-//                                        facebookId: response.id,
+//                                        googleId: response.id,
 //                                        accountType: 'user'
 //                                    }).success(function(response) {
 //                                        if(response.success){
