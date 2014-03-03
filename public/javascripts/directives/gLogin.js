@@ -18,24 +18,22 @@ window.getBookinNgApp.directive('glogin', function(){
                                     'userId': 'me'
                                 });
                                 request.execute(function(response) {
-                                    console.log(response);
-//                                    $http.post('/user', {
-//                                        name: response.displayName,
-//                                        email: response.email,
-//                                        googleId: response.id,
-//                                        accountType: 'user'
-//                                    }).success(function(response) {
-//                                        if(response.success){
-//                                            console.log($cookies.user);
-//                                            if(response.user.accountType == 'user'){
-//                                                $rootScope.$emit('userLoggedIn', {
-//                                                    user: response.user
-//                                                });
-//                                            } else if(response.user.accountType == 'admin'){
-//                                                $window.location.href = '/pages/adminSchedule';
-//                                            }
-//                                        }
-//                                    });
+                                    $http.post('/user', {
+                                        name: response.displayName,
+                                        email: response.emails[0].value,
+                                        googleId: response.id,
+                                        accountType: 'user'
+                                    }).success(function(response) {
+                                        if(response.success){
+                                            if(response.user.accountType == 'user'){
+                                                $rootScope.$emit('userLoggedIn', {
+                                                    user: response.user
+                                                });
+                                            } else if(response.user.accountType == 'admin'){
+                                                $window.location.href = '/pages/adminSchedule';
+                                            }
+                                        }
+                                    });
                                 });
                             });
                         } else {
