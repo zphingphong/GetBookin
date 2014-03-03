@@ -3,15 +3,6 @@
  */
 
 window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope, $scope, $cookies) {
-    if($cookies.user){
-        $rootScope.user = JSON.parse($cookies.user);
-        if($rootScope.user.accountType == 'admin'){
-            $rootScope.locations = JSON.parse($cookies.locations);
-        }
-    } else {
-        $rootScope.user = null;
-    }
-
     $(function() {
         var dateInputContainer = $('#time-court-selection-date-input');
         var timeInputContainer = $('#time-court-selection-time-input');
