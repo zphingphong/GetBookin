@@ -28,7 +28,7 @@ window.getBookinNgApp.directive('logoutbtn', function(){
 //                    $rootScope.user = null;
 //                }
 
-                delete $cookies['user'];
+                document.cookie = "username=; expires=Thu, 01 Jan 2012 00:00:00 GMT";
                 if($rootScope.user.accountType == 'admin'){
                     delete $cookies['locations'];
                     $window.location.href = '/';

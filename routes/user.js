@@ -24,7 +24,9 @@ exports.signIn = function(req, res){
             if(response.user.accountType == 'admin'){
                 location.retrieveByAdmin(response.user, function(locations){
                     res.cookie('locations', JSON.stringify(locations), {
-                        expires: moment().add('d', 2).toDate()
+                        expires: moment().add('d', 2).toDate(),
+                        path: '/',
+                        domain: '.getbookin.com'
 //                        domain: '.getbookin.com'
                     });
 
