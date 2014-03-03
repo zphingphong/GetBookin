@@ -34,7 +34,7 @@ html(ng-app='getBookin')
             a(href='/') COURT SCHEDULE
           li
             a(href='/') SETTINGS
-        ul(class='nav navbar-nav navbar-right')
+        ul(class='nav navbar-nav navbar-right login-status-container')
           div(ng-if='user != null')
             strong {{user.email}}&nbsp;
             logoutbtn
