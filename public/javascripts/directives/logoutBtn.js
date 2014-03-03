@@ -11,11 +11,11 @@ window.getBookinNgApp.directive('logoutbtn', function(){
         controller: function($rootScope, $scope, $cookies, $window){
             var logUserOut = function(){
                 delete $cookies['user'];
-                $rootScope.user = null;
                 if($rootScope.user.accountType == 'admin'){
                     delete $cookies['location'];
                     $window.location.href = '/';
                 }
+                $rootScope.user = null;
             };
 
             $scope.logout = function(){
