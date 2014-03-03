@@ -19,12 +19,12 @@ window.getBookinNgApp.directive('logoutbtn', function(){
             };
 
             $scope.logout = function(){
-                logUserOut();
                 if($rootScope.user.facebookId){ // Sign out from Facebook
                     FB.logout();
                 } else if($rootScope.user.googleId) {// Sign out from Google
                     gapi.auth.signOut();
                 }
+                logUserOut();
             }
         }
     }
