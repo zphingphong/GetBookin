@@ -6,10 +6,7 @@ block additionalCss
 block mainContainer
   section(id='time-court-selection-container', ng-controller='TimeCourtSelectionCtrl')
     h1 Time & Court&nbsp;
-      small
-        span(class='text-blue pad-left-right-medium') Available
-        span(class='text-orange pad-left-right-medium') Unpaid
-        span(class='text-black pad-left-right-medium') Paid
+      small When and which court do you want to change your booking to?
     .well
       .row
         div(class='col-sm-5')
@@ -55,9 +52,7 @@ block mainContainer
 block additionalJs
   //App JS
   script(src='/javascripts/controllers/timecourtselection.js')
-  script(src='/javascripts/controllers/contacts.js')
   script(src='/javascripts/controllers/summary.js')
-  script(src='/javascripts/directives/courtImageSlider.js')
   script(src='/javascripts/directives/courtAvailabilityTable.js')
   script(src='/javascripts/page/index.js')
   // ---- Bootstrap & Plugins ----
