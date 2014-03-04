@@ -82,6 +82,9 @@ nav {
   min-width: 36px;
   margin-left: 4px;
 }
+#main-navbar .active {
+  background-color: #347ec8;
+}
 #location-map {
   height: 500px;
 }

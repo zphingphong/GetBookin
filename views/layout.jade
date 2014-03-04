@@ -38,11 +38,9 @@ html(ng-app='getBookin')
       #main-navbar(class='collapse navbar-collapse')
         ul(class='nav navbar-nav')
           li
-            a(href='/') NEW BOOKING
+            a(href='/', ng-class="{'active' : currentPage == '/'}") NEW BOOKING
           li
             a(href='/') MAKE CHANGE
-          li
-            a(href='/') CANCEL
         ul(class='nav navbar-nav navbar-right login-status-container')
           #main-navbar-signinwith(ng-if='user == null') SIGN IN WITH&nbsp;
             glogin

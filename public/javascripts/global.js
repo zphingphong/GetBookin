@@ -4,7 +4,7 @@
 window.getBookinNgApp = angular.module('getBookin', ['ngCookies']);
 
 /******************************** [START] Events ***********************************/
-window.getBookinNgApp.run(function($rootScope, $cookies) {
+window.getBookinNgApp.run(function($rootScope, $cookies, $window) {
     if($cookies.user){
         $rootScope.user = JSON.parse($cookies.user);
         if($rootScope.user.accountType == 'admin'){
@@ -13,6 +13,7 @@ window.getBookinNgApp.run(function($rootScope, $cookies) {
     } else {
         $rootScope.user = null;
     }
+    $rootScope.currentPage = $window.location.pathname;
 });
 /******************************** [END] Events ***********************************/
 
