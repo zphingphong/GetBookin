@@ -7,6 +7,7 @@ require('../public/config');
 
 
 var bookingSchema = mongoose.Schema({
+    bookingId: String, // Location id + first character of the customer name + current timestamp
     location: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Location'

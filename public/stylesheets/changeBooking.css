@@ -104,3 +104,9 @@ nav {
 #time-court-selection-table th {
   text-align: center;
 }
+section#time-court-selection-container {
+  display: none;
+}
+section#summary-container {
+  display: none;
+}

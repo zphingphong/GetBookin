@@ -12,7 +12,10 @@ exports.book = function(req, res){
     var bookings = req.body.selectedTimeCourt;
     var contactInfo = req.body.contactInfo;
     var paid = req.body.paid;
+    var bookingId = req.body.bookingId;
+
     bookings.forEach(function(booking, index, bookings){
+        booking.bookingId = bookingId;
         booking.contactName = contactInfo.contactName;
         booking.contactNo = contactInfo.contactNo;
         booking.dateTime = moment(booking.dateTime, 'YYYY-MM-DD hA').toDate();

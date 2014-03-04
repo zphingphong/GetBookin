@@ -19,22 +19,29 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
         if(sessionStorage.selectedTimeCourt){
             $scope.bookings = JSON.parse(sessionStorage.selectedTimeCourt);
             $scope.grandTotal = 0;
+            //Calculate price
             $.each($scope.bookings, function(index, booking){
                 $scope.grandTotal += booking.price;
             });
         }
     });
 
-    $scope.$on('selectedLocationBroadcast', function(event, args){
+    $rootScope.$on('locationSelected', function(event, args){
         $scope.locationName = args.location.name;
+        $scope.location = args.location;
     });
 
     $scope.confirmBooking = function(){
         var paid = $scope.paid ? 'full' : 'none';
 
+        var contactInfo = JSON.parse(sessionStorage.contactInfo);
+        // Generate booking id
+        var bookingId = $scope.location.id + contactInfo.contactName.charAt(0) + moment().valueOf();
+
         $http.post('/booking', {
+            bookingId: bookingId,
             selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
-            contactInfo: JSON.parse(sessionStorage.contactInfo),
+            contactInfo: contactInfo,
             paid: paid
         }).success(function(status){
             if(status.success){
