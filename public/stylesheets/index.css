@@ -56,6 +56,11 @@ address {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
+.margin-top-bottom-right-small {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+}
 .section-spaced {
   padding-top: 70px;
 }

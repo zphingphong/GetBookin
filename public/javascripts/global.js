@@ -45,6 +45,13 @@ $(document).ready(function() {
         po.src = 'https://apis.google.com/js/client:plusone.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
     })();
+
+    var errorContainer = $('#error-msg-container');
+    var errorCloseBtn = $('#error-msg-container .close');
+    errorCloseBtn.on('click', function(event){
+        errorContainer.hide();
+    });
+
 });
 /******************************** [END] Facebook setup ***********************************/
 

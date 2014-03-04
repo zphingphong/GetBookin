@@ -61,3 +61,29 @@ exports.bookingByDateTimeRange = function(startDateTime, endDateTime, location, 
     });
 };
 
+exports.getBookingAndLocationById = function(bookingId, cb){
+    bookingModel.find({
+        bookingId: bookingId
+    }, function (err, bookings) {
+        if(err){
+            console.error('Cannot retrieve booking from database, error: ');
+            console.error(err);
+        } else {
+            cb(bookings);
+        }
+    }).populate('location');
+};
+
+exports.deleteBookingById = function(bookingId, cb){
+    bookingModel.find({
+        bookingId: bookingId
+    }).remove(function (err, deletedcount) {
+        if(err){
+            console.error('Cannot retrieve booking from database, error: ');
+            console.error(err);
+        } else {
+            cb(deletedcount);
+        }
+    });
+};
+

@@ -42,6 +42,7 @@ app.get('/location', location.location);
 app.get('/schedule/:datetime', location.scheduleByDateTime);
 app.post('/booking', booking.book);
 app.get('/booking', booking.searchBooking);
+app.get('/booking/cancel/:bookingId', booking.cancelBooking);
 app.post('/user', user.signIn);
 app.post('/user/signout', user.signOut);
 

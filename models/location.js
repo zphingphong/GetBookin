@@ -41,7 +41,9 @@ var locationSchema = mongoose.Schema({
     admins: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+    allowChange: Number, // Number of hours that the user allow to change booking before the booked hour (-1 means no change allowed, 0 means anytime)
+    allowCancel: Number // Same logic as allowChange
 });
 
 var locationModel = mongoose.model('Location', locationSchema);
