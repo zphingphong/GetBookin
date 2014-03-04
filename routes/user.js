@@ -14,21 +14,20 @@ exports.signIn = function(req, res){
     var loggedInCb = function(response){
         if(response.user){ // found a user
             res.cookie('user', JSON.stringify(response.user), {
-                expires: moment().add('d', 2).toDate(),
-                path: '/',
-                domain: '.getbookin.com',
-                httpOnly: true
+                expires: moment().add('d', 2).toDate()
+//                path: '/',
+//                domain: '.getbookin.com'
 //                secure: true
+//                httpOnly: true
             });
 
             // Get and response with an array of locations, if the user is an admin
             if(response.user.accountType == 'admin'){
                 location.retrieveByAdmin(response.user, function(locations){
                     res.cookie('locations', JSON.stringify(locations), {
-                        expires: moment().add('d', 2).toDate(),
-                        path: '/',
-                        domain: '.getbookin.com',
-                        httpOnly: true
+                        expires: moment().add('d', 2).toDate()
+//                        path: '/',
+//                        domain: '.getbookin.com'
                     });
 
                     response.locations = locations;
@@ -60,9 +59,14 @@ exports.signIn = function(req, res){
 };
 
 exports.signOut = function(req, res){
-
-    res.clearCookie('user', { path: '/' });
-    res.clearCookie('locations', { path: '/' });
-    res.location('/');
+    res.cookie('user', '', {
+        expires: moment().subtract('d', 10).toDate()
+    });
+    res.cookie('locations', '', {
+        expires: moment().subtract('d', 10).toDate()
+    });
+    res.send({
+        success: true
+    });
 };
 

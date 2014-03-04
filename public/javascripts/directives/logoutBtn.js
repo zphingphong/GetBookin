@@ -8,10 +8,13 @@ window.getBookinNgApp.directive('logoutbtn', function(){
         template: '<button class="btn btn-default navbar-btn" ng-click="logout()"><i class="fa fa-power-off"></i> Sign Out</button>',
         link: function(scope, element, attrs){
         },
-        controller: function($rootScope, $scope, $http){
+        controller: function($scope, $http, $window){
             $scope.logout = function(){
                 $http.post('/user/signout', {
                 }).success(function(response) {
+                    if(response.success){
+                        $window.location.href = '/';
+                    }
                 });
             }
         }
