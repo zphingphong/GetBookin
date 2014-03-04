@@ -1,0 +1,64 @@
+extends ../layout
+block additionalCss
+  link(rel='stylesheet', href='/stylesheets/changeBooking.css', type='text/css')
+  // ---- Bootstrap & Plugins ----
+  link(rel='stylesheet', href='/libraries/BootstrapFormHelpers/dist/css/bootstrap-formhelpers.min.css', type='text/css')
+block mainContainer
+  section(id='time-court-selection-container', ng-controller='TimeCourtSelectionCtrl')
+    h1 Time & Court&nbsp;
+      small
+        span(class='text-blue pad-left-right-medium') Available
+        span(class='text-orange pad-left-right-medium') Unpaid
+        span(class='text-black pad-left-right-medium') Paid
+    .well
+      .row
+        div(class='col-sm-5')
+          div(id='time-court-selection-date-input', class='bfh-datepicker', data-format='y-m-d', data-min='today')
+        div(class='col-sm-5')
+          div(id='time-court-selection-time-input', class='bfh-timepicker', data-mode='12h')
+        div(class='col-sm-2')
+          button(type='button', class='btn btn-default full-width') View Floor Plan
+      .row
+        div(class='col-sm-12')
+          button(type='button', class='btn btn-info btn-xs full-width margin-top-bottom-small', ng-click='showAvailibility()')
+            h4 View {{locationName}} court availability for {{currentDate}} at {{currentTime}}
+      court-availability-table
+      .row
+        div(class='col-sm-12 text-right')
+          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='bookSelectedCourts()') Book selected court(s)
+  section(id='summary-container', class='section-spaced', ng-controller='SummaryCtrl')
+    h1 Summary&nbsp;
+      small Could you please confirm your booking at {{locationName}}?
+    .well
+      table(class='table margin-top-bottom-small', id='summary-table')
+        thead
+          th Court No.
+          th Date & Time
+          th Price
+        tbody
+          tr(ng-repeat='booking in bookings')
+            td {{booking.courtNo}}
+            td {{booking.dateTime}}
+            td {{booking.price | currency:"$"}}
+          tr(id='summary-table-footer', class='')
+            td(colspan=2)
+              h4 Grand total
+            td
+              h4 {{grandTotal | currency:"$"}}
+      .row
+        div(class='col-sm-12')
+          input(type='checkbox', ng-model='paid')
+          | &nbsp; The cutomer paid for the booking.
+      .row
+        div(class='col-sm-12 text-right')
+          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='confirmBooking()') Confirm Booking
+block additionalJs
+  //App JS
+  script(src='/javascripts/controllers/timecourtselection.js')
+  script(src='/javascripts/controllers/contacts.js')
+  script(src='/javascripts/controllers/summary.js')
+  script(src='/javascripts/directives/courtImageSlider.js')
+  script(src='/javascripts/directives/courtAvailabilityTable.js')
+  script(src='/javascripts/page/index.js')
+  // ---- Bootstrap & Plugins ----
+  script(src='/libraries/BootstrapFormHelpers/dist/js/bootstrap-formhelpers.min.js')

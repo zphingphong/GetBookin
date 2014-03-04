@@ -23,7 +23,7 @@ html(ng-app='getBookin')
     // ---- jQuery & Plugins ----
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
 
-    script(src='javascripts/global.js')
+    script(src='/javascripts/global.js')
 
     block additionalCss
 
@@ -34,13 +34,13 @@ html(ng-app='getBookin')
     nav(class='navbar navbar-default navbar-fixed-top', role='navigation')
       .navbar-header
       a.navbar-brand(href='/')
-        img(src='images/logo.png', alt='LOGO')
+        img(src='/images/logo.png', alt='LOGO')
       #main-navbar(class='collapse navbar-collapse')
         ul(class='nav navbar-nav')
           li
             a(href='/', ng-class="{'active' : currentPage == '/'}") NEW BOOKING
           li
-            a(href='/') MAKE CHANGE
+            a(href='/pages/changeBooking', ng-class="{'active' : currentPage == '/pages/changeBooking'}") MAKE CHANGE
         ul(class='nav navbar-nav navbar-right login-status-container')
           #main-navbar-signinwith(ng-if='user == null') SIGN IN WITH&nbsp;
             glogin
@@ -58,18 +58,18 @@ html(ng-app='getBookin')
     // ---- Google Map ----
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAo0HBa1d_xNIIwx1UksjPg50MQQbjLCjQ&sensor=true')
 
-    script(src='config.js')
+    script(src='/config.js')
 
     // ---- Classes ----
-    script(src='javascripts/class/map.js')
+    script(src='/javascripts/class/map.js')
 
     // ---- Additional Libraries ----
-    script(src='libraries/moment/moment.min.js')
+    script(src='/libraries/moment/moment.min.js')
 
     // ---- App JS ----
-    script(src='javascripts/directives/fbLogin.js')
-    script(src='javascripts/directives/gLogin.js')
-    script(src='javascripts/directives/logoutBtn.js')
+    script(src='/javascripts/directives/fbLogin.js')
+    script(src='/javascripts/directives/gLogin.js')
+    script(src='/javascripts/directives/logoutBtn.js')
 
     block additionalJs
 
