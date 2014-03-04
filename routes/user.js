@@ -16,7 +16,8 @@ exports.signIn = function(req, res){
             res.cookie('user', JSON.stringify(response.user), {
                 expires: moment().add('d', 2).toDate(),
                 path: '/',
-                domain: '.getbookin.com'
+                domain: '.getbookin.com',
+                httpOnly: true
 //                secure: true
             });
 
@@ -26,8 +27,8 @@ exports.signIn = function(req, res){
                     res.cookie('locations', JSON.stringify(locations), {
                         expires: moment().add('d', 2).toDate(),
                         path: '/',
-                        domain: '.getbookin.com'
-//                        domain: '.getbookin.com'
+                        domain: '.getbookin.com',
+                        httpOnly: true
                     });
 
                     response.locations = locations;
@@ -56,5 +57,12 @@ exports.signIn = function(req, res){
         });
     }
 
+};
+
+exports.signOut = function(req, res){
+
+    res.clearCookie('user', { path: '/' });
+    res.clearCookie('locations', { path: '/' });
+    res.location('/');
 };
 
