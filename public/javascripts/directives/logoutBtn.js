@@ -8,7 +8,7 @@ window.getBookinNgApp.directive('logoutbtn', function(){
         template: '<button class="btn btn-default navbar-btn" ng-click="logout()"><i class="fa fa-power-off"></i> Sign Out</button>',
         link: function(scope, element, attrs){
         },
-        controller: function($rootScope, $scope, $cookies, $window){
+        controller: function($rootScope, $scope, $cookieStore, $window){
             $scope.logout = function(){
 //                delete $cookies['user'];
 //                if($rootScope.user.facebookId){ // Sign out from Facebook
@@ -28,9 +28,9 @@ window.getBookinNgApp.directive('logoutbtn', function(){
 //                    $rootScope.user = null;
 //                }
 
-                delete $cookies['user'];
+                $cookieStore.remove('user');
                 if($rootScope.user.accountType == 'admin'){
-                    delete $cookies['locations'];
+                    $cookieStore.remove('locations');
                     $window.location.href = '/';
                 }
                 $rootScope.user = null;
