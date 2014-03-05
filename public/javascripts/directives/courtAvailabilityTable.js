@@ -211,6 +211,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     $scope.refreshSchedule();
                 }
             });
+
+            $scope.changeToSelectedCourts = function(){
+                $rootScope.$emit('contactsFilled'); // Show summary
+            };
         },
         link: function(scope, element, attrs){
         }

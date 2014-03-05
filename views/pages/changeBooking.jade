@@ -54,14 +54,14 @@ block mainContainer
       court-availability-table
       .row
         div(class='col-sm-12 text-right')
-          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='bookSelectedCourts()') Change to selected court(s)
+          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='changeToSelectedCourts()') Change to selected court(s)
       .row
         div(class='col-sm-12')
           small *** Note that this booking will be deleted once you confirm the new booking selections.
 
   section(id='summary-container', class='section-spaced', ng-controller='SummaryCtrl')
     h1 Summary&nbsp;
-      small Could you please confirm your booking at {{locationName}}?
+      small Could you please confirm your change at {{locationName}}?
     .well
       table(class='table margin-top-bottom-small', id='summary-table')
         thead
@@ -85,6 +85,7 @@ block mainContainer
       .row
         div(class='col-sm-12 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='confirmBooking()') Confirm Booking
+
 block additionalJs
   //App JS
   script(src='/javascripts/controllers/changebookinglist.js')
