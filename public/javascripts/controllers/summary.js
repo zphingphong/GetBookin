@@ -42,7 +42,11 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
             bookingId: bookingId,
             selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
             contactInfo: contactInfo,
-            paid: paid
+            payment: {
+                paid: paid,
+                method: 'Visa',
+                dollar: 0
+            }
         }).success(function(status){
             if(status.success){
                 // Clear selected courts

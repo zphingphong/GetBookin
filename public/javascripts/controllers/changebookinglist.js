@@ -14,6 +14,15 @@ window.getBookinNgApp.controller('ChangeBookingListCtrl', function ($rootScope, 
     };
 
     $scope.changeBooking = function(){
+        $http.get('/booking/change/' + $scope.bookingId).success(function(results) {
+            if(results.success){
+                $scope.oldBookings = results.booking;
+                sessionStorage.oldBookings = JSON.stringify($scope.oldBookings);
+            } else {
+                $rootScope.errorMsg = results.error;
+                $('#error-msg-container').show();
+            }
+        });
     };
 
 });

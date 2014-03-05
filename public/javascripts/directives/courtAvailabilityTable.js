@@ -147,7 +147,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                                 booking: existingBookings[0],
                                 price: currentPrice,
                                 selected: isSelected,
-                                paid: existingBookings.length > 0 ? existingBookings[0].paid : null
+                                paid: existingBookings.length > 0 ? existingBookings[0].payment.paid : null
                             });
                         }
                     }
