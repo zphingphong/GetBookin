@@ -69,5 +69,32 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
             }
         });
     };
+
+    $scope.confirmChangeBooking = function(){
+        var paid = $scope.paid ? 'full' : 'none';
+
+        var contactInfo = JSON.parse(sessionStorage.contactInfo);
+        // Generate booking id
+        var bookingId = $scope.location.id + contactInfo.contactName.charAt(0) + moment().valueOf();
+
+        $http.post('/booking/change', {
+            bookingId: bookingId,
+            oldBooking: JSON.parse(sessionStorage.oldBookings),
+            selectedTimeCourt: JSON.parse(sessionStorage.selectedTimeCourt),
+            contactInfo: contactInfo,
+            payment: {
+                paid: paid,
+                method: 'Visa',
+                dollar: 0
+            }
+        }).success(function(status){
+            if(status.success){
+                // Clear old booking and  selected courts
+                sessionStorage.selectedTimeCourt = JSON.stringify([]);
+                sessionStorage.removeItem('oldBookings');
+                $window.location.href = '/';
+            }
+        });
+    };
 });
 

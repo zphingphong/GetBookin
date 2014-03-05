@@ -106,33 +106,9 @@ exports.getChangeBooking = function(req, res){
 };
 
 exports.changeBooking = function(req, res){
-    var oldBooking = req.body.oldBooking;
-    var bookingId = req.params.bookingId;
-    booking.getBookingAndLocationById(bookingId, function(bookings){
-        if(bookings.length > 0){
-            // Check for the change rule of this location
-            var location = bookings[0].location;
-            var allowChange = location.allowChange;
-            if(allowChange < 0){ // Not allowed
-                res.send({
-                    success: false,
-                    error: 'Change is not allowed for this booking. Please contact ' + location.name + ' at ' + location.phones[0] + ' for more information.'
-                });
-            } else {
-                if(moment(bookings[0].dateTime).diff(moment(), 'h') < allowChange){ // Too late to cancel
-                    res.send({
-                        success: false,
-                        error: 'It is too late to change this booking. You may change this booking ' + allowChange + ' hours before the booking time.'
-                    });
-                } else { // Return existing booking to user
-                    res.send(bookings);
-                }
-            }
-        } else {
-            res.send({
-                success: false,
-                error: 'Cannot find any booking associated with this confirmation number. Please double check the number. Note that it is case sensitive.'
-            });
+    booking.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
+        if(deletedcount == req.body.oldBooking.length){
+            exports.book(req, res);
         }
     });
 };
