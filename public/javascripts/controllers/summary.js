@@ -36,6 +36,9 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
 
         var contactInfo = JSON.parse(sessionStorage.contactInfo);
         // Generate booking id
+        if($scope.isAdmin){
+            $scope.location = $rootScope.locations[0];
+        }
         var bookingId = $scope.location.id + contactInfo.contactName.charAt(0) + moment().valueOf();
 
         $http.post('/booking', {
@@ -75,6 +78,9 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
 
         var contactInfo = JSON.parse(sessionStorage.contactInfo);
         // Generate booking id
+        if($scope.isAdmin){
+            $scope.location = $rootScope.locations[0];
+        }
         var bookingId = $scope.location.id + contactInfo.contactName.charAt(0) + moment().valueOf();
 
         $http.post('/booking/change', {

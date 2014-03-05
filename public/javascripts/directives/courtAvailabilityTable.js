@@ -215,6 +215,17 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
             $scope.changeToSelectedCourts = function(){
                 $rootScope.$emit('contactsFilled'); // Show summary
             };
+
+            $scope.cancelCourtByAdmin = function(booking){
+                $http.get('/booking/admincancel/' + booking.bookingId).success(function(results) {
+                    if(results.success){
+                        $scope.refreshSchedule();
+                    } else {
+                        $rootScope.errorMsg = results.error;
+                        $('#error-msg-container').show();
+                    }
+                });
+            };
         },
         link: function(scope, element, attrs){
         }

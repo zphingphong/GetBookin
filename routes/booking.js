@@ -112,3 +112,14 @@ exports.changeBooking = function(req, res){
         }
     });
 };
+
+exports.cancelBookingByAdmin = function(req, res){ // Admin is allow to cancel anytime, ignore the rules
+    booking.deleteBookingById(req.params.bookingId, function(deletedcount){
+        if(deletedcount > 0){
+            res.send({
+                success: true,
+                msg: 'The booking is canceled.'
+            });
+        }
+    });
+};

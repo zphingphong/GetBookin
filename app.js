@@ -43,6 +43,7 @@ app.get('/schedule/:datetime', location.scheduleByDateTime);
 app.post('/booking', booking.book);
 app.get('/booking', booking.searchBooking);
 app.get('/booking/cancel/:bookingId', booking.cancelBooking);
+app.get('/booking/admincancel/:bookingId', booking.cancelBookingByAdmin);
 app.get('/booking/change/:bookingId', booking.getChangeBooking);
 app.post('/booking/change', booking.changeBooking);
 app.post('/user', user.signIn);
