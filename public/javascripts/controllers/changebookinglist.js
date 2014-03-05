@@ -18,6 +18,9 @@ window.getBookinNgApp.controller('ChangeBookingListCtrl', function ($rootScope, 
             if(results.success){
                 $scope.oldBookings = results.booking;
                 sessionStorage.oldBookings = JSON.stringify($scope.oldBookings);
+                $rootScope.$emit('locationSelected', {
+                    location: $scope.oldBookings[0].location
+                });
             } else {
                 $rootScope.errorMsg = results.error;
                 $('#error-msg-container').show();
