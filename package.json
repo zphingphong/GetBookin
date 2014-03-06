@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "mongoose": "latest",
-    "express": "latest",
+    "express": "3.4.8",
     "jade": "latest",
     "stylus": "latest",
     "moment": "latest",
