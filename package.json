@@ -6,11 +6,11 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "mongoose": "latest",
+    "mongoose": "3.8.8",
     "express": "3.4.8",
-    "jade": "latest",
-    "stylus": "latest",
-    "moment": "latest",
-    "jquery": "latest"
+    "jade": "1.3.0",
+    "stylus": "0.42.3",
+    "moment": "2.5.1",
+    "jquery": "2.1.0"
   }
 }
