@@ -47,13 +47,17 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
             contactInfo: contactInfo,
             payment: {
                 paid: paid,
-                method: 'Visa',
+                method: '',
                 dollar: 0
             }
         }).success(function(status){
             if(status.success){
                 // Clear selected courts
                 sessionStorage.selectedTimeCourt = JSON.stringify([]);
+
+                if(status.paymentApprovalUrl){
+                    $window.location.href = status.paymentApprovalUrl;
+                }
 
                 // Go to the top and refresh the schedule
                 if(!$scope.isAdmin){

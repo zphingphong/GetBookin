@@ -3,10 +3,36 @@
  */
 
 //Import all schemas
-var booking = require('../models/booking');
+var bookingModel = require('../models/booking');
+var locationModel = require('../models/location');
 
 //Import libraries
 var moment = require('moment');
+
+var Paypal = require('paypal-adaptive');
+var paypalSdk = new Paypal({
+    userId:    'minion-biz_api1.despicable.com',
+    password:  '1394186512',
+    signature: 'AsO6JRt7OOQXNrngeQo0sPgJ2dfxA17glaqfeB8vGtsDSpqj63voBGal',
+    sandbox:   true //defaults to false
+});
+
+var getBookingPaymentInfo = function(bookings, cb){
+    var price = 0;
+    locationModel.retrieveById(bookings[0].location, function(err, location){
+        switch (location.pricingPattern) {
+            case 'flat':
+                price = location.pricingFlat * bookings.length;
+                break;
+        }
+
+        cb({
+            success: true,
+            price: price,
+            payPalAccount: location.payPalAccount
+        })
+    });
+};
 
 exports.book = function(req, res){
     var bookings = req.body.selectedTimeCourt;
@@ -22,20 +48,67 @@ exports.book = function(req, res){
         booking.payment = payment;
     });
 
-    booking.book(bookings, function(status){
-        res.send(status);
+    bookingModel.book(bookings, function(status){
+        if(status.success){
+            getBookingPaymentInfo(bookings, function(args){
+                if(args.success){
+                    var totalPrice = args.price;
+                    var payPalPayload = {
+                        requestEnvelope: {
+                            errorLanguage:  'en_US'
+                        },
+                        actionType:     'PAY',
+                        currencyCode:   'CAD',
+                        feesPayer:      'EACHRECEIVER',
+                        memo:           'Booking payment',
+                        cancelUrl:      'http://www.getbookin.com/',
+                        returnUrl:      'http://www.getbookin.com/',
+                        receiverList: {
+                            receiver: [
+                                {
+                                    email:  args.payPalAccount,
+                                    amount: totalPrice
+                                }
+                            ]
+                        }
+                    };
+
+                    paypalSdk.pay(payPalPayload, function (err, response) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            res.send({
+                                success: true,
+                                paymentApprovalUrl: response.paymentApprovalUrl
+                            });
+                            // Response will have the original Paypal API response
+//                            console.log(response);
+                            // But also a paymentApprovalUrl, so you can redirect the sender to checkout easily
+//                            console.log('Redirect to %s', response.paymentApprovalUrl);
+                        }
+                    });
+                } else {
+                    res.send({
+                        success: false,
+                        error: 'Cannot calculate total price for this booking. Please try again.'
+                    });
+                }
+            });
+        } else {
+            res.send(status);
+        }
     });
 };
 
 exports.searchBooking = function(req, res){
-    booking.bookingByDateTimeRange(moment(req.query.startDateTime, 'YYYY-MM-DD hA'), moment(req.query.endDateTime, 'YYYY-MM-DD hA'), req.query.location, function(bookings){
+    bookingModel.bookingByDateTimeRange(moment(req.query.startDateTime, 'YYYY-MM-DD hA'), moment(req.query.endDateTime, 'YYYY-MM-DD hA'), req.query.location, function(bookings){
         res.send(bookings);
     });
 };
 
 exports.cancelBooking = function(req, res){
     var bookingId = req.params.bookingId;
-    booking.getBookingAndLocationById(bookingId, function(bookings){
+    bookingModel.getBookingAndLocationById(bookingId, function(bookings){
         if(bookings.length > 0){
             // Check for the cancellation rule of this location
             var location = bookings[0].location;
@@ -52,7 +125,7 @@ exports.cancelBooking = function(req, res){
                         error: 'It is too late to cancel this booking. You may cancel this booking ' + allowCancel + ' hours before the booking time.'
                     });
                 } else { // Cancel booking
-                    booking.deleteBookingById(bookingId, function(deletedcount){
+                    bookingModel.deleteBookingById(bookingId, function(deletedcount){
                         if(deletedcount == bookings.length){
                             res.send({
                                 success: true,
@@ -73,7 +146,7 @@ exports.cancelBooking = function(req, res){
 
 exports.getChangeBooking = function(req, res){
     var bookingId = req.params.bookingId;
-    booking.getBookingAndLocationById(bookingId, function(bookings){
+    bookingModel.getBookingAndLocationById(bookingId, function(bookings){
         if(bookings.length > 0){
             // Check for the change rule of this location
             var location = bookings[0].location;
@@ -106,7 +179,7 @@ exports.getChangeBooking = function(req, res){
 };
 
 exports.changeBooking = function(req, res){
-    booking.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
+    bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
         if(deletedcount == req.body.oldBooking.length){
             exports.book(req, res);
         }
@@ -114,7 +187,7 @@ exports.changeBooking = function(req, res){
 };
 
 exports.cancelBookingByAdmin = function(req, res){ // Admin is allow to cancel anytime, ignore the rules
-    booking.deleteBookingById(req.params.bookingId, function(deletedcount){
+    bookingModel.deleteBookingById(req.params.bookingId, function(deletedcount){
         if(deletedcount > 0){
             res.send({
                 success: true,

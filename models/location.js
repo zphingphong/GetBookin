@@ -37,6 +37,7 @@ var locationSchema = mongoose.Schema({
     pricingPattern: String,
     pricingFlat: Number,
     pricingDay: [Number],
+    payPalAccount: String,
     courtCount: Number,
     admins: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -59,6 +60,10 @@ exports.retrieveAll = function(req, res, cb){
             cb(locations);
         }
     });
+};
+
+exports.retrieveById = function(id, cb){
+    locationModel.findById(id, cb);
 };
 
 exports.retrieveByAddress = function(req, res, cb){
