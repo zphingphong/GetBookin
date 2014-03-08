@@ -64,6 +64,8 @@ exports.book = function(req, res){
                         memo:           'Booking payment',
                         cancelUrl:      'http://www.getbookin.com/booking/cancelpayment/' + bookingId,
                         returnUrl:      'http://www.getbookin.com/booking/paid/' + bookingId,
+//                        cancelUrl:      'http://localhost:3000/booking/cancelpayment/' + bookingId,
+//                        returnUrl:      'http://localhost:3000/booking/paid/' + bookingId,
                         receiverList: {
                             receiver: [
                                 {
@@ -203,7 +205,7 @@ exports.cancelBookingByAdmin = function(req, res){ // Admin is allow to cancel a
 };
 
 exports.paidBooking = function(req, res){
-    var bookingId = req.query.bookingId;
+    var bookingId = req.params.bookingId;
     bookingModel.updateBookingById(bookingId, {
         payment: {
             paid: 'full'
@@ -216,7 +218,7 @@ exports.paidBooking = function(req, res){
 //            });
             res.render('index', {
                 title: 'Get Bookin\' - Badminton',
-                msg: 'Thank you for booking. You confirmation number is ' + bookingId + '.'
+                msg: 'Thank you for booking. You confirmation number is <strong>' + bookingId + '</strong>.'
             });
         } else {
             res.render('index', {
@@ -233,7 +235,7 @@ exports.paidBooking = function(req, res){
 };
 
 exports.cancelPaymentBooking = function(req, res){
-    var bookingId = req.query.bookingId;
+    var bookingId = req.params.bookingId;
     bookingModel.deleteBookingById(bookingId, function(deletedcount){
         res.render('index', {
             title: 'Get Bookin\' - Badminton',
