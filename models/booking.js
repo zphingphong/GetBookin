@@ -91,3 +91,18 @@ exports.deleteBookingById = function(bookingId, cb){
     });
 };
 
+exports.updateBookingById = function(bookingId, updateValues, cb){
+    bookingModel.update({
+        bookingId: bookingId
+    }, updateValues, {
+        multi: true
+    }, function(err, numberAffected, rawResponse){
+        if(err){
+            console.error('Cannot update booking to database, error: ');
+            console.error(err);
+        } else {
+            cb(numberAffected, rawResponse);
+        }
+    });
+};
+

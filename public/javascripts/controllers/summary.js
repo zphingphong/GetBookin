@@ -96,7 +96,8 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
                 paid: paid,
                 method: 'Visa',
                 dollar: 0
-            }
+            },
+            isAdmin: $scope.isAdmin
         }).success(function(status){
             if(status.success){
                 // Clear old booking and  selected courts

@@ -34,6 +34,11 @@ html(ng-app='getBookin')
       button(type='button', class='close', aria-hidden='true')&times;
       | {{errorMsg}}
 
+    if msg
+      div(id='msg-container', class='alert alert-info')
+        button(type='button', class='close', aria-hidden='true')&times;
+        = msg
+
     // -------- [START] Navbar --------
     nav(class='navbar navbar-default navbar-fixed-top', role='navigation')
       .navbar-header

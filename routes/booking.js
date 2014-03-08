@@ -39,6 +39,7 @@ exports.book = function(req, res){
     var contactInfo = req.body.contactInfo;
     var payment = req.body.payment;
     var bookingId = req.body.bookingId;
+    var isAdmin = req.body.isAdmin;
 
     bookings.forEach(function(booking, index, bookings){
         booking.bookingId = bookingId;
@@ -49,7 +50,7 @@ exports.book = function(req, res){
     });
 
     bookingModel.book(bookings, function(status){
-        if(status.success){
+        if(status.success && !isAdmin){
             getBookingPaymentInfo(bookings, function(args){
                 if(args.success){
                     var totalPrice = args.price;
@@ -61,8 +62,8 @@ exports.book = function(req, res){
                         currencyCode:   'CAD',
                         feesPayer:      'EACHRECEIVER',
                         memo:           'Booking payment',
-                        cancelUrl:      'http://www.getbookin.com/',
-                        returnUrl:      'http://www.getbookin.com/',
+                        cancelUrl:      'http://www.getbookin.com/booking/cancelpayment/' + bookingId,
+                        returnUrl:      'http://www.getbookin.com/booking/paid/' + bookingId,
                         receiverList: {
                             receiver: [
                                 {
@@ -104,6 +105,10 @@ exports.searchBooking = function(req, res){
     bookingModel.bookingByDateTimeRange(moment(req.query.startDateTime, 'YYYY-MM-DD hA'), moment(req.query.endDateTime, 'YYYY-MM-DD hA'), req.query.location, function(bookings){
         res.send(bookings);
     });
+};
+
+exports.doCancelBooking = function(){
+
 };
 
 exports.cancelBooking = function(req, res){
@@ -194,5 +199,45 @@ exports.cancelBookingByAdmin = function(req, res){ // Admin is allow to cancel a
                 msg: 'The booking is canceled.'
             });
         }
+    });
+};
+
+exports.paidBooking = function(req, res){
+    var bookingId = req.query.bookingId;
+    bookingModel.updateBookingById(bookingId, {
+        payment: {
+            paid: 'full'
+        }
+    }, function(numberAffected, rawResponse){
+        if(numberAffected > 0){
+//            res.send({
+//                success: true,
+//                msg: 'Thank you for booking. You confirmation number is ' + bookingId + '.'
+//            });
+            res.render('index', {
+                title: 'Get Bookin\' - Badminton',
+                msg: 'Thank you for booking. You confirmation number is ' + bookingId + '.'
+            });
+        } else {
+            res.render('index', {
+                title: 'Get Bookin\' - Badminton',
+                msg: 'No booking found. Payment failed.'
+            });
+//            res.send({
+//                success: false,
+//                error: 'No booking found.'
+//            });
+        }
+
+    });
+};
+
+exports.cancelPaymentBooking = function(req, res){
+    var bookingId = req.query.bookingId;
+    bookingModel.deleteBookingById(bookingId, function(deletedcount){
+        res.render('index', {
+            title: 'Get Bookin\' - Badminton',
+            msg: 'Your payment and booking is canceled.'
+        });
     });
 };
