@@ -45,8 +45,7 @@ exports.book = function(req, res){
         booking.bookingId = bookingId;
         booking.contactName = contactInfo.contactName;
         booking.contactNo = contactInfo.contactNo;
-        var momentDateTime = moment(booking.dateTime, 'YYYY-MM-DD hA');
-        booking.dateTime = new Date(momentDateTime.year(), momentDateTime.month(), momentDateTime.date(), momentDateTime.hour());
+        booking.dateTime = moment(booking.dateTime, 'YYYY-MM-DD hA').toDate();
         booking.payment = payment;
     });
 
