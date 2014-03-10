@@ -45,7 +45,8 @@ exports.book = function(req, res){
         booking.bookingId = bookingId;
         booking.contactName = contactInfo.contactName;
         booking.contactNo = contactInfo.contactNo;
-        booking.dateTime = moment(booking.dateTime, 'YYYY-MM-DD hA').toDate();
+        var momentDateTime = moment(booking.dateTime, 'YYYY-MM-DD hA');
+        booking.dateTime = new Date(momentDateTime.year(), momentDateTime.month(), momentDateTime.date(), momentDateTime.hour());
         booking.payment = payment;
     });
 
@@ -67,12 +68,10 @@ exports.book = function(req, res){
 //                        cancelUrl:      'http://localhost:3000/booking/cancelpayment/' + bookingId,
 //                        returnUrl:      'http://localhost:3000/booking/paid/' + bookingId,
                         receiverList: {
-                            receiver: [
-                                {
-                                    email:  args.payPalAccount,
-                                    amount: totalPrice
-                                }
-                            ]
+                            receiver: [{
+                                email:  args.payPalAccount,
+                                amount: totalPrice
+                            }]
                         }
                     };
 

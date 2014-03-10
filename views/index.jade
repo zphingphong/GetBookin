@@ -9,6 +9,8 @@ block additionalCss
   // ---- Bootstrap & Plugins ----
   link(rel='stylesheet', href='/libraries/BootstrapFormHelpers/dist/css/bootstrap-formhelpers.min.css', type='text/css')
 
+
+
 block mainContainer
   section(id='location-selection-container', ng-controller='LocationCtrl')
     h1 Location&nbsp;
@@ -75,7 +77,6 @@ block mainContainer
       .row
         div(class='col-sm-12 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='bookSelectedCourts()') Book selected court(s)
-
 
   section(id='contacts-container', class='section-spaced', ng-controller='ContactsCtrl')
     h1 Contacts&nbsp;
