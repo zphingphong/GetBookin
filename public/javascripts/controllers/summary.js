@@ -49,7 +49,8 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
                 paid: paid,
                 method: '',
                 dollar: 0
-            }
+            },
+            isAdmin: $scope.isAdmin
         }).success(function(status){
             if(status.success){
                 // Clear selected courts
