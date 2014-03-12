@@ -11,9 +11,9 @@ var moment = require('moment');
 
 var Paypal = require('paypal-adaptive');
 var paypalSdk = new Paypal({
-    userId:    'minion-biz_api1.despicable.com',
-    password:  '1394186512',
-    signature: 'AsO6JRt7OOQXNrngeQo0sPgJ2dfxA17glaqfeB8vGtsDSpqj63voBGal',
+    userId:    'hello_api1.getbookin.com',
+    password:  'LVD5NLA3J8N2W7SX',
+    signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AmzI5Jg.pPWKnJhsHILf-Cq0gPuG',
     sandbox:   true //defaults to false
 });
 
