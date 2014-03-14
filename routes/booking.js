@@ -11,9 +11,14 @@ var moment = require('moment');
 
 var Paypal = require('paypal-adaptive');
 var paypalSdk = new Paypal({
-    userId:    'hello_api1.getbookin.com',
-    password:  'LVD5NLA3J8N2W7SX',
-    signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AmzI5Jg.pPWKnJhsHILf-Cq0gPuG',
+//    userId:    'hello_api1.getbookin.com',
+//    password:  'LVD5NLA3J8N2W7SX',
+//    signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AmzI5Jg.pPWKnJhsHILf-Cq0gPuG',
+//    appId: 'APP-6LF625064D807440K'
+
+    userId:    'minion-biz_api1.despicable.com',
+    password:  '1394186512',
+    signature: 'AsO6JRt7OOQXNrngeQo0sPgJ2dfxA17glaqfeB8vGtsDSpqj63voBGal',
     sandbox:   true //defaults to false
 });
 
@@ -78,10 +83,21 @@ exports.book = function(req, res){
                         if (err) {
                             console.log(err);
                         } else {
-                            res.send({
-                                success: true,
-                                paymentApprovalUrl: response.paymentApprovalUrl
+                            // Update pay key to the booking object
+                            bookingModel.updateBookingById(bookingId, {
+                                payment: {
+                                    payPalPayKey: response.payKey
+                                }
+                            }, function(numberAffected, rawResponse){
+                                if(numberAffected > 0){
+                                    res.send({
+                                        success: true,
+                                        paymentApprovalUrl: response.paymentApprovalUrl
+                                    });
+                                }
+
                             });
+
                             // Response will have the original Paypal API response
 //                            console.log(response);
                             // But also a paymentApprovalUrl, so you can redirect the sender to checkout easily
@@ -184,6 +200,8 @@ exports.getChangeBooking = function(req, res){
 };
 
 exports.changeBooking = function(req, res){
+    // Check if the total price is the same
+
     bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
         if(deletedcount == req.body.oldBooking.length){
             exports.book(req, res);

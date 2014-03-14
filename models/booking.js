@@ -24,7 +24,8 @@ var bookingSchema = mongoose.Schema({
     payment: {
         paid: String,
         method: String,
-        dollar: Number
+        dollar: Number,
+        payPalPayKey: String
     }
 });
 
@@ -42,7 +43,8 @@ exports.book = function(bookings, cb){
             });
         } else {
             cb({
-                success: true
+                success: true,
+                bookings: bookings
             });
         }
     })
