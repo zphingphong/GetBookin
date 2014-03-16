@@ -146,7 +146,7 @@ exports.cancelBooking = function(req, res){
                     });
                 } else { // Cancel booking
                     var payPalPayload = {
-                        payKey:         bookings[0].payPalPayKey,
+                        payKey:         bookings[0].payment.payPalPayKey,
                         requestEnvelope: {
                             errorLanguage:  'en_US'
                         },
@@ -158,11 +158,17 @@ exports.cancelBooking = function(req, res){
                         if (err) {
                             console.log(err);
                         } else {
+                            var msg;
+                            if(response.refundInfo[0].refundTransactionStatus = 'COMPLETED'){ // Refund completed
+                                msg = 'Your booking is canceled. Full refund has made to the same payment method as you used when made a booking.';
+                            } else {
+                                msg = 'Your booking is canceled. However, we experienced a problem with the refund please contact us.';
+                            }
                             bookingModel.deleteBookingById(bookingId, function(deletedcount){
                                 if(deletedcount == bookings.length){
                                     res.send({
                                         success: true,
-                                        msg: 'Your booking is canceled.'
+                                        msg:msg
                                     });
                                 }
                             });
