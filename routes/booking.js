@@ -83,11 +83,10 @@ exports.book = function(req, res){
                         if (err) {
                             console.log(err);
                         } else {
+                            payment.payPalPayKey = response.payKey;
                             // Update pay key to the booking object
                             bookingModel.updateBookingById(bookingId, {
-                                payment: {
-                                    payPalPayKey: response.payKey
-                                }
+                                'payment.payPalPayKey': response.payKey
                             }, function(numberAffected, rawResponse){
                                 if(numberAffected > 0){
                                     res.send({
@@ -146,11 +145,26 @@ exports.cancelBooking = function(req, res){
                         error: 'It is too late to cancel this booking. You may cancel this booking ' + allowCancel + ' hours before the booking time.'
                     });
                 } else { // Cancel booking
-                    bookingModel.deleteBookingById(bookingId, function(deletedcount){
-                        if(deletedcount == bookings.length){
-                            res.send({
-                                success: true,
-                                msg: 'Your booking is canceled.'
+                    var payPalPayload = {
+                        payKey:         bookings[0].payPalPayKey,
+                        requestEnvelope: {
+                            errorLanguage:  'en_US'
+                        },
+                        actionType:     'REFUND',
+                        refundType:     'Full'
+                    };
+
+                    paypalSdk.refund(payPalPayload, function (err, response) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            bookingModel.deleteBookingById(bookingId, function(deletedcount){
+                                if(deletedcount == bookings.length){
+                                    res.send({
+                                        success: true,
+                                        msg: 'Your booking is canceled.'
+                                    });
+                                }
                             });
                         }
                     });
@@ -223,9 +237,7 @@ exports.cancelBookingByAdmin = function(req, res){ // Admin is allow to cancel a
 exports.paidBooking = function(req, res){
     var bookingId = req.params.bookingId;
     bookingModel.updateBookingById(bookingId, {
-        payment: {
-            paid: 'full'
-        }
+        'payment.paid': 'full'
     }, function(numberAffected, rawResponse){
         if(numberAffected > 0){
 //            res.send({
