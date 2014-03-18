@@ -15982,8 +15982,8 @@ var BFHTimezonesList = {
       
       if (this.options.buttons === true) {
         this.$element.parent()
-          .on('mousedown.bfhnumber.data-api', '.inc', BFHNumber.prototype.btninc)
-          .on('mousedown.bfhnumber.data-api', '.dec', BFHNumber.prototype.btndec);
+            .on('touchstart.bfhnumber.data-api mousedown.bfhnumber.data-api', '.inc', BFHNumber.prototype.btninc)
+            .on('touchstart.bfhnumber.data-api mousedown.bfhnumber.data-api', '.dec', BFHNumber.prototype.btndec);
       }
       
       this.formatNumber();
@@ -16044,8 +16044,8 @@ var BFHTimezonesList = {
         $this.$element.data('interval', interval);
       }, 750);
       $this.$element.data('timer', timer);
-      
-      $(document).one('mouseup', {btn: $this}, BFHNumber.prototype.mouseup);
+
+      $(document).one('touchend mouseup', {btn: $this}, BFHNumber.prototype.mouseup);
       
       return true;
     },
@@ -16070,8 +16070,8 @@ var BFHTimezonesList = {
         $this.$element.data('interval', interval);
       }, 750);
       $this.$element.data('timer', timer);
-      
-      $(document).one('mouseup', {btn: $this}, BFHNumber.prototype.mouseup);
+
+      $(document).one('touchend mouseup', {btn: $this}, BFHNumber.prototype.mouseup);
       
       return true;
     },
