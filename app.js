@@ -58,7 +58,13 @@ app.get('/pages/:name', routes.pages);
 //Locals
 app.locals.config = require('./public/config');
 
-mongoose.connect('mongodb://root:getzbookin@dbh45.mongolab.com:27457/getbookinstage');
+if(isProd){
+    mongoose.connect('mongodb://root:getzbookin@dbh46.mongolab.com:27467/getbookin'); // Prod
+} else {
+    mongoose.connect('mongodb://root:getzbookin@dbh45.mongolab.com:27457/getbookinstage'); // Stage
+}
+
+
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
