@@ -114,7 +114,8 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
         if(bookings.length > 1){
             $.each(bookings, function(index, booking){
                 if(booking.courtNo == courtNo && booking.dateTime == dateTime){
-                    sessionStorage.selectedTimeCourt = JSON.stringify(bookings.splice(index, 1));
+                    bookings.splice(index, 1);
+                    sessionStorage.selectedTimeCourt = JSON.stringify(bookings);
                     return false;
                 }
             });
