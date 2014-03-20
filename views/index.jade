@@ -69,7 +69,6 @@ block mainContainer
           div(id='time-court-selection-time-input', class='bfh-timepicker', data-mode='12h')
         div(class='col-sm-2')
           a(type='button', class='btn btn-default full-width', ng-click='showAvailibility()') Go!&nbsp;
-            span(class='glyphicon glyphicon-circle-arrow-right')
           //a(type='button', class='btn btn-default full-width', href='') View Floor Plan
       .row
         div(class='col-sm-12')
@@ -106,13 +105,17 @@ block mainContainer
           th Court No.
           th Date & Time
           th Price
+          th
         tbody
           tr(ng-repeat='booking in bookings')
             td {{booking.courtNo}}
             td {{booking.dateTime}}
             td {{booking.price | currency:"$"}}
+            td
+              button(type='button', class='btn btn-danger right', ng-click='removeSelectedBooking(booking.courtNo, booking.dateTime)')
+                span(class='glyphicon glyphicon-remove')
           tr(id='summary-table-footer', class='')
-            td(colspan=2)
+            td(colspan=3)
               h4 Grand total
             td
               h4 {{grandTotal | currency:"$"}}
