@@ -91,7 +91,8 @@ block mainContainer
           input(type='text', class='form-control', placeholder='John Doe', ng-model='name')
         div(class='col-sm-2') Phone No.
         div(class='col-sm-4')
-          input(type='text', class='form-control bfh-phone', placeholder='(604) 111-8888', ng-model='phoneNo')
+          form
+            input(type='text', class='form-control bfh-phone', data-format='+1 (ddd) ddd-dddd', placeholder='(604) 111-8888', ng-model='phoneNo')
       .row
         div(class='col-sm-12 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='saveContactInfoAndViewSummary()') View Summary
