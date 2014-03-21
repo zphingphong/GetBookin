@@ -52,6 +52,12 @@ $(document).ready(function() {
         errorContainer.hide();
     });
 
+    var msgContainer = $('#msg-container');
+    var msgCloseBtn = $('#msg-container .close');
+    msgCloseBtn.on('click', function(event){
+        msgContainer.hide();
+    });
+
 });
 /******************************** [END] Facebook setup ***********************************/
 

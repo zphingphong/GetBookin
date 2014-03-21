@@ -34,6 +34,10 @@ html(ng-app='getBookin')
       button(type='button', class='close', aria-hidden='true')&times;
       | {{errorMsg}}
 
+    div(id='msg-container', class='alert alert-danger')
+      button(type='button', class='close', aria-hidden='true')&times;
+      | {{msg}}
+
     if msg
       div(id='server-msg-container', class='alert alert-info alert-dismissable')
         button(type='button', class='close', aria-hidden='true', data-dismiss='alert')&times;

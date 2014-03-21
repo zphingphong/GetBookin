@@ -6,6 +6,8 @@ window.getBookinNgApp.controller('ChangeBookingListCtrl', function ($rootScope, 
     $scope.cancelBooking = function(){
         $http.get('/booking/cancel/' + $scope.bookingId).success(function(results) {
             if(results.success){
+                $rootScope.msg = results.msg;
+                $('#msg-container').show();
             } else {
                 $rootScope.errorMsg = results.error;
                 $('#error-msg-container').show();

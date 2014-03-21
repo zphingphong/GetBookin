@@ -55,7 +55,7 @@ exports.book = function(req, res){
     });
 
     bookingModel.book(bookings, function(status){
-        if(status.success && !isAdmin){
+        if(status.success && !isAdmin && payment.paid != 'full'){
             getBookingPaymentInfo(bookings, function(args){
                 if(args.success){
                     var totalPrice = args.price;
@@ -159,8 +159,17 @@ exports.cancelBooking = function(req, res){
                             console.log(err);
                         } else {
                             var msg;
-                            if(response.refundInfo[0].refundTransactionStatus = 'COMPLETED'){ // Refund completed
-                                msg = 'Your booking is canceled. Full refund has made to the same payment method as you used when made a booking.';
+                            if(response.refundInfoList){
+                                switch(response.refundInfoList.refundInfo[0].refundStatus) {
+                                    case 'REFUNDED': // Refund completed
+                                        msg = 'Your booking is canceled. Full refund has made to the same payment method as you used when booking was made.';
+                                        break;
+                                    case 'NOT_PAID':
+                                        msg = 'Your booking is canceled. No refund was made, since you have not paid for the booking.'
+                                        break;
+                                    default:
+                                        msg = 'Your booking is canceled. However, we experienced a problem with the refund please contact us.';
+                                }
                             } else {
                                 msg = 'Your booking is canceled. However, we experienced a problem with the refund please contact us.';
                             }
@@ -168,7 +177,7 @@ exports.cancelBooking = function(req, res){
                                 if(deletedcount == bookings.length){
                                     res.send({
                                         success: true,
-                                        msg:msg
+                                        msg: msg
                                     });
                                 }
                             });
@@ -221,10 +230,41 @@ exports.getChangeBooking = function(req, res){
 
 exports.changeBooking = function(req, res){
     // Check if the total price is the same
+    req.body.oldBooking[0].location = req.body.oldBooking[0].location._id;
+    getBookingPaymentInfo(req.body.oldBooking, function(args){
+        if(args.success){
+            var totalOldBookingPrice = args.price;
 
-    bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
-        if(deletedcount == req.body.oldBooking.length){
-            exports.book(req, res);
+            getBookingPaymentInfo(req.body.selectedTimeCourt, function(args){
+                if(args.success){
+                    var totalNewBookingPrice = args.price;
+
+                    if(totalOldBookingPrice == totalNewBookingPrice) { // Same price changed the booking
+                        bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
+                            if(deletedcount == req.body.oldBooking.length){
+                                req.body.payment.paid = req.body.oldBooking[0].payment.paid;
+                                exports.book(req, res);
+                            }
+                        });
+                    } else if(totalOldBookingPrice > totalNewBookingPrice) {
+
+                    } else {
+
+                    }
+
+                } else {
+                    res.send({
+                        success: false,
+                        error: 'Cannot calculate total price for your new booking selection. Please try again.'
+                    });
+                }
+            });
+
+        } else {
+            res.send({
+                success: false,
+                error: 'Cannot calculate total price for your old booking. Please try again.'
+            });
         }
     });
 };
@@ -273,7 +313,7 @@ exports.cancelPaymentBooking = function(req, res){
     bookingModel.deleteBookingById(bookingId, function(deletedcount){
         res.render('index', {
             title: 'Get Bookin\' - Badminton',
-            msg: 'Your payment and booking is canceled.'
+            msg: 'Your booking was canceled, and your payment was refunded'
         });
     });
 };
