@@ -19,6 +19,7 @@ html(ng-app='getBookin')
     // ---- AngularJS & Plugins ----
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js')
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-cookies.min.js')
+    script(src='http://code.angularjs.org/1.2.12/angular-sanitize.min.js')
 
     // ---- jQuery & Plugins ----
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
@@ -36,7 +37,7 @@ html(ng-app='getBookin')
 
     div(id='msg-container', class='alert alert-danger')
       button(type='button', class='close', aria-hidden='true')&times;
-      | {{msg}}
+      span(ng-bind-html='msg')
 
     if msg
       div(id='server-msg-container', class='alert alert-info alert-dismissable')

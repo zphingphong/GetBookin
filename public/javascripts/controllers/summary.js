@@ -99,12 +99,26 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
                 dollar: 0
             },
             isAdmin: $scope.isAdmin
-        }).success(function(status){
-            if(status.success){
+        }).success(function(results){
+            if(results.success){
                 // Clear old booking and  selected courts
                 sessionStorage.selectedTimeCourt = JSON.stringify([]);
                 sessionStorage.removeItem('oldBookings');
-                $window.location.href = '/';
+
+                var timeCourtSelectionContainer = $('#time-court-selection-container');
+                timeCourtSelectionContainer.hide();
+                var summaryContainer = $('#summary-container');
+                summaryContainer.hide();
+                $("html, body").animate({
+                    scrollTop: 0
+                });
+
+                $rootScope.msg = results.msg;
+                $('#msg-container').show();
+                $rootScope.$emit('changeBookingConfirmed');
+            } else {
+                $rootScope.errorMsg = results.error;
+                $('#error-msg-container').show();
             }
         });
     };

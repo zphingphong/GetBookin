@@ -36,5 +36,9 @@ window.getBookinNgApp.controller('ChangeBookingListCtrl', function ($rootScope, 
         });
     };
 
+    $rootScope.$on('changeBookingConfirmed', function(event, args){
+        $scope.oldBookings = [];
+    });
+
 });
 

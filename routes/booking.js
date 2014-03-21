@@ -239,17 +239,15 @@ exports.changeBooking = function(req, res){
                 if(args.success){
                     var totalNewBookingPrice = args.price;
 
-                    if(totalOldBookingPrice == totalNewBookingPrice) { // Same price changed the booking
+                    if(totalOldBookingPrice == totalNewBookingPrice && req.body.oldBooking[0].payment.paid == 'full') { // Same price changed the booking
                         bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
                             if(deletedcount == req.body.oldBooking.length){
-                                req.body.payment.paid = req.body.oldBooking[0].payment.paid;
+                                req.body.payment.paid = 'full';
                                 exports.book(req, res);
                             }
                         });
                     } else if(totalOldBookingPrice > totalNewBookingPrice) {
-
                     } else {
-
                     }
 
                 } else {
@@ -282,29 +280,32 @@ exports.cancelBookingByAdmin = function(req, res){ // Admin is allow to cancel a
 
 exports.paidBooking = function(req, res){
     var bookingId = req.params.bookingId;
-    bookingModel.updateBookingById(bookingId, {
-        'payment.paid': 'full'
-    }, function(numberAffected, rawResponse){
-        if(numberAffected > 0){
-//            res.send({
-//                success: true,
-//                msg: 'Thank you for booking. You confirmation number is ' + bookingId + '.'
-//            });
-            res.render('index', {
-                title: 'Get Bookin\' - Badminton',
-                msg: 'Thank you for booking. You confirmation number is <strong>' + bookingId + '</strong>.'
-            });
-        } else {
-            res.render('index', {
-                title: 'Get Bookin\' - Badminton',
-                msg: 'No booking found. Payment failed.'
-            });
-//            res.send({
-//                success: false,
-//                error: 'No booking found.'
-//            });
-        }
+    getBookingPaymentInfo(bookingId, function(args){
+        bookingModel.updateBookingById(bookingId, {
+            'payment.paid': 'full',
+            'payment.dollar': args.price
+        }, function(numberAffected, rawResponse){
+            if(numberAffected > 0){
+    //            res.send({
+    //                success: true,
+    //                msg: 'Thank you for booking. You confirmation number is ' + bookingId + '.'
+    //            });
+                res.render('index', {
+                    title: 'Get Bookin\' - Badminton',
+                    msg: 'Thank you for booking. You confirmation number is <strong>' + bookingId + '</strong>.'
+                });
+            } else {
+                res.render('index', {
+                    title: 'Get Bookin\' - Badminton',
+                    msg: 'No booking found. Payment failed.'
+                });
+    //            res.send({
+    //                success: false,
+    //                error: 'No booking found.'
+    //            });
+            }
 
+        });
     });
 };
 

@@ -1,7 +1,7 @@
 /**
  * Created by ZoM on 04/12/13.
  */
-window.getBookinNgApp = angular.module('getBookin', ['ngCookies']);
+window.getBookinNgApp = angular.module('getBookin', ['ngCookies', 'ngSanitize']);
 
 /******************************** [START] Events ***********************************/
 window.getBookinNgApp.run(function($rootScope, $cookies, $window) {

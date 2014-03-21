@@ -3,6 +3,7 @@
  */
 
 var mongoose = require('mongoose');
+var util = require('util');
 require('../public/config');
 
 
@@ -42,8 +43,10 @@ exports.book = function(bookings, cb){
                 errorCode: ERROR_DB_FAILURE
             });
         } else {
+            var bookingId = util.isArray(bookings) ? bookings[0].bookingId : bookings.bookingId;
             cb({
                 success: true,
+                msg: 'Thank you for booking. You confirmation number is <strong>' + bookingId + '</strong>.',
                 bookings: bookings
             });
         }
