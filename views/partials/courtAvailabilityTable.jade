@@ -46,8 +46,8 @@ table(class='table table-hover', id='time-court-selection-table')
         strong Court {{$index+1}}
       td(ng-repeat='courtInfo in court track by $index')
         button(type='button', ng-if='courtInfo.isAvailable', ng-click='timeCourtSelected(this)', ng-class='{"btn btn-info" : !courtInfo.selected, "btn btn-success" : courtInfo.selected}')
-          span(, ng-class='{"glyphicon glyphicon-unchecked" : !courtInfo.selected, "glyphicon glyphicon-check" : courtInfo.selected}')
+          span(ng-class='{"glyphicon glyphicon-unchecked" : !courtInfo.selected, "glyphicon glyphicon-check" : courtInfo.selected}')
           //|  {{courtInfo.isAvailable}}
           | {{courtInfo.price | currency:"$"}}
-        button(type='button', data-toggle='modal', data-target='#booking-info-popup', ng-if='!courtInfo.isAvailable && isAdmin', ng-click='showBookingInfo(courtInfo.booking)', ng-class='{"btn btn-default" : courtInfo.paid, "btn btn-warning" : courtInfo.none}')
+        button(type='button', data-toggle='modal', data-target='#booking-info-popup', ng-if='!courtInfo.isAvailable && isAdmin', ng-click='showBookingInfo(courtInfo.booking)', ng-class='{"btn btn-default" : courtInfo.paid == "full", "btn btn-warning" : courtInfo.paid == "none"}')
           | {{courtInfo.booking.contactName}}
