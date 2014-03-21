@@ -48,7 +48,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 var todayDate = moment(dateInput.val(), "YYYY-MM-DD");
                 var todayDay = todayDate.day();
                 var todayHours = hours[todayDate.day()];
-                var currentHour = moment(timeInput.val(), "hh:mm A").hour();
+                var currentHour = moment(timeInput.val(), "HH:mm").hour();
                 var isOpen = $scope.isOpen(todayHours, currentHour);
 
                 //Calculate number of columns to be UI responsive. Show more hours if user's screen is wider.
