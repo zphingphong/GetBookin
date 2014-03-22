@@ -2,7 +2,7 @@
  * Created by ZoM on 03/12/13.
  */
 
-window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope) {
+window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope, $window) {
     if($rootScope.user && $rootScope.user.accountType == 'admin' && $window.location.pathname == '/pages/adminSchedule'){
         $scope.isAdmin = true;
     } else {
