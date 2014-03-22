@@ -41,15 +41,15 @@ block mainContainer
       small When and which court do you want to change your booking to?
     .well
       .row
-        div(class='col-sm-5')
-          div(id='time-court-selection-date-input', class='bfh-datepicker', data-format='y-m-d', data-min='today')
-        div(class='col-sm-5')
-          div(id='time-court-selection-time-input', class='bfh-timepicker')
         div(class='col-sm-2')
           //button(type='button', class='btn btn-default full-width') View Floor Plan
           a(type='button', class='btn btn-default full-width', ng-click='showAvailibility()')
             span(class='glyphicon glyphicon-refresh')
             | &nbsp;Refresh
+        div(class='col-sm-5')
+          div(id='time-court-selection-date-input', class='bfh-datepicker', data-format='y-m-d', data-min='today')
+        div(class='col-sm-5')
+          div(id='time-court-selection-time-input', class='bfh-timepicker')
       .row
         div(class='col-sm-12')
           //button(type='button', class='btn btn-info btn-xs full-width margin-top-bottom-small', ng-click='showAvailibility()')

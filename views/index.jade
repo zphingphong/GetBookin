@@ -63,14 +63,14 @@ block mainContainer
       small When and which court do you want to book?
     .well
       .row
-        div(class='col-sm-5')
-          div(id='time-court-selection-date-input', class='bfh-datepicker', data-format='y-m-d', data-min='today')
-        div(class='col-sm-5')
-          div(id='time-court-selection-time-input', class='bfh-timepicker')
         div(class='col-sm-2')
           a(type='button', class='btn btn-default full-width', ng-click='showAvailibility()')
             span(class='glyphicon glyphicon-refresh')
             | &nbsp;Refresh
+        div(class='col-sm-5')
+          div(id='time-court-selection-date-input', class='bfh-datepicker', data-format='y-m-d', data-min='today')
+        div(class='col-sm-5')
+          div(id='time-court-selection-time-input', class='bfh-timepicker')
           //a(type='button', class='btn btn-default full-width', href='') View Floor Plan
       .row
         div(class='col-sm-12')
