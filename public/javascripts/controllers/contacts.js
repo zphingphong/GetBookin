@@ -3,8 +3,14 @@
  */
 
 window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope) {
+    if($rootScope.user && $rootScope.user.accountType == 'admin' && $window.location.pathname == '/pages/adminSchedule'){
+        $scope.isAdmin = true;
+    } else {
+        $scope.isAdmin = false;
+    }
+
     //Retrieve user information from session storage
-    if(sessionStorage.contactInfo){
+    if(sessionStorage.contactInfo && !$scope.isAdmin){
         var contactInfo = JSON.parse(sessionStorage.contactInfo);
         $scope.name = contactInfo.contactName;
         $scope.phoneNo = contactInfo.contactNo;
