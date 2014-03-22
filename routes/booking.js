@@ -24,16 +24,22 @@ var paypalSdk = new Paypal({
 
 var getBookingPaymentInfo = function(bookings, cb){
     var price = 0;
+
     locationModel.retrieveById(bookings[0].location, function(err, location){
-        switch (location.pricingPattern) {
-            case 'flat':
-                price = location.pricingFlat * bookings.length;
-                break;
+        if(bookings[0].changeBookingPrice) {
+            price = bookings[0].changeBookingPrice;
+        } else {
+            switch (location.pricingPattern) {
+                case 'flat':
+                    price = location.pricingFlat * bookings.length;
+                    break;
+            }
         }
 
         cb({
             success: true,
             price: price,
+            previousPaid:  bookings[0].paidBookingPrice ? bookings[0].paidBookingPrice : 0,
             payPalAccount: location.payPalAccount
         })
     });
@@ -57,6 +63,12 @@ exports.book = function(req, res){
     bookingModel.book(bookings, function(status){
         if(status.success && !isAdmin && payment.paid != 'full'){
             getBookingPaymentInfo(bookings, function(args){
+                //Store paid price
+                bookingModel.updateBookingById(bookings[0].bookingId, {
+                    'payment.dollar': args.price + args.previousPaid
+                }, function(numberAffected, rawResponse){
+                });
+
                 if(args.success){
                     var totalPrice = args.price;
                     var payPalPayload = {
@@ -229,39 +241,62 @@ exports.getChangeBooking = function(req, res){
 };
 
 exports.changeBooking = function(req, res){
-    // Check if the total price is the same
-    req.body.oldBooking[0].location = req.body.oldBooking[0].location._id;
-    getBookingPaymentInfo(req.body.oldBooking, function(args){
-        if(args.success){
-            var totalOldBookingPrice = args.price;
-
-            getBookingPaymentInfo(req.body.selectedTimeCourt, function(args){
+    bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
+        if(deletedcount == req.body.oldBooking.length){
+            // Check if the total price is the same
+            req.body.oldBooking[0].location = req.body.oldBooking[0].location._id;
+            getBookingPaymentInfo(req.body.oldBooking, function(args){
                 if(args.success){
-                    var totalNewBookingPrice = args.price;
+                    var totalOldBookingPrice = args.price;
+                    getBookingPaymentInfo(req.body.selectedTimeCourt, function(args){
+                        if(args.success){
+                            var totalNewBookingPrice = args.price;
 
-                    if(totalOldBookingPrice == totalNewBookingPrice && req.body.oldBooking[0].payment.paid == 'full') { // Same price changed the booking
-                        bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
-                            if(deletedcount == req.body.oldBooking.length){
+                            if(totalOldBookingPrice == totalNewBookingPrice && req.body.oldBooking[0].payment.paid == 'full') { // Same price changed the booking
                                 req.body.payment.paid = 'full';
                                 exports.book(req, res);
+                            } else if(totalOldBookingPrice < totalNewBookingPrice) { // New selection is more expensive, charge more
+                                req.body.selectedTimeCourt[0].changeBookingPrice = totalNewBookingPrice - totalOldBookingPrice;
+                                req.body.selectedTimeCourt[0].paidBookingPrice = totalOldBookingPrice;
+                                exports.book(req, res);
+                            } else { // New booking is less expensive, refund customer the difference
+                                var payPalPayload = {
+                                    payKey:         req.body.oldBooking[0].payment.payPalPayKey,
+                                    requestEnvelope: {
+                                        errorLanguage:  'en_US'
+                                    },
+                                    actionType:     'REFUND',
+                                    refundType:     'Partial',
+                                    currencyCode:   'CAD',
+                                    amount:         totalOldBookingPrice - totalNewBookingPrice
+                                };
+
+                                paypalSdk.refund(payPalPayload, function (err, response) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        if(response.refundInfoList){
+                                            req.body.payment.paid = 'full';
+                                            req.body.selectedTimeCourt[0].paidBookingPrice = 0 - totalOldBookingPrice;
+                                            exports.book(req, res);
+                                        }
+                                    }
+                                });
                             }
-                        });
-                    } else if(totalOldBookingPrice > totalNewBookingPrice) {
-                    } else {
-                    }
+                        } else {
+                            res.send({
+                                success: false,
+                                error: 'Cannot calculate total price for your new booking selection. Please try again.'
+                            });
+                        }
+                    });
 
                 } else {
                     res.send({
                         success: false,
-                        error: 'Cannot calculate total price for your new booking selection. Please try again.'
+                        error: 'Cannot calculate total price for your old booking. Please try again.'
                     });
                 }
-            });
-
-        } else {
-            res.send({
-                success: false,
-                error: 'Cannot calculate total price for your old booking. Please try again.'
             });
         }
     });
@@ -280,32 +315,29 @@ exports.cancelBookingByAdmin = function(req, res){ // Admin is allow to cancel a
 
 exports.paidBooking = function(req, res){
     var bookingId = req.params.bookingId;
-    getBookingPaymentInfo(bookingId, function(args){
-        bookingModel.updateBookingById(bookingId, {
-            'payment.paid': 'full',
-            'payment.dollar': args.price
-        }, function(numberAffected, rawResponse){
-            if(numberAffected > 0){
-    //            res.send({
-    //                success: true,
-    //                msg: 'Thank you for booking. You confirmation number is ' + bookingId + '.'
-    //            });
-                res.render('index', {
-                    title: 'Get Bookin\' - Badminton',
-                    msg: 'Thank you for booking. You confirmation number is <strong>' + bookingId + '</strong>.'
-                });
-            } else {
-                res.render('index', {
-                    title: 'Get Bookin\' - Badminton',
-                    msg: 'No booking found. Payment failed.'
-                });
-    //            res.send({
-    //                success: false,
-    //                error: 'No booking found.'
-    //            });
-            }
+    bookingModel.updateBookingById(bookingId, {
+        'payment.paid': 'full'
+    }, function(numberAffected, rawResponse){
+        if(numberAffected > 0){
+//            res.send({
+//                success: true,
+//                msg: 'Thank you for booking. You confirmation number is ' + bookingId + '.'
+//            });
+            res.render('index', {
+                title: 'Get Bookin\' - Badminton',
+                msg: 'Thank you for booking. You confirmation number is <strong>' + bookingId + '</strong>.'
+            });
+        } else {
+            res.render('index', {
+                title: 'Get Bookin\' - Badminton',
+                msg: 'No booking found. Payment failed.'
+            });
+//            res.send({
+//                success: false,
+//                error: 'No booking found.'
+//            });
+        }
 
-        });
     });
 };
 

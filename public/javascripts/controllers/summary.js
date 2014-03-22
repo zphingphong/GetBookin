@@ -105,6 +105,10 @@ window.getBookinNgApp.controller('SummaryCtrl', function ($rootScope, $scope, $h
                 sessionStorage.selectedTimeCourt = JSON.stringify([]);
                 sessionStorage.removeItem('oldBookings');
 
+                if(results.paymentApprovalUrl){
+                    $window.location.href = results.paymentApprovalUrl;
+                }
+
                 var timeCourtSelectionContainer = $('#time-court-selection-container');
                 timeCourtSelectionContainer.hide();
                 var summaryContainer = $('#summary-container');
