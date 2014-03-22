@@ -277,7 +277,7 @@ exports.changeBooking = function(req, res){
                                     } else {
                                         if(response.refundInfoList){
                                             req.body.payment.paid = 'full';
-                                            req.body.selectedTimeCourt[0].paidBookingPrice = 0 - totalOldBookingPrice;
+                                            req.body.selectedTimeCourt[0].paidBookingPrice = totalNewBookingPrice - totalOldBookingPrice;
                                             exports.book(req, res);
                                         }
                                     }
