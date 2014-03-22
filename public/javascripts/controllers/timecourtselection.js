@@ -2,7 +2,8 @@
  * Created by ZoM on 03/12/13.
  */
 
-window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope, $scope, $cookies) {
+window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope, $scope) {
+    $scope.selectedTimeCourt = [];
     $(function() {
         var dateInputContainer = $('#time-court-selection-date-input');
         var timeInputContainer = $('#time-court-selection-time-input');

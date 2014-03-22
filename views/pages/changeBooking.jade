@@ -56,7 +56,7 @@ block mainContainer
       court-availability-table
       .row
         div(class='col-sm-12 text-right')
-          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='changeToSelectedCourts()') Change to selected court(s)
+          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='changeToSelectedCourts()', ng-disabled='selectedTimeCourt.length == 0') Change to selected court(s)
       .row
         div(class='col-sm-12')
           small *** Note that this booking will be deleted once you confirm the new booking selections.

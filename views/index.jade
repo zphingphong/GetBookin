@@ -79,7 +79,7 @@ block mainContainer
       court-availability-table
       .row
         div(class='col-sm-12 text-right')
-          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='bookSelectedCourts()') Book selected court(s)
+          button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='bookSelectedCourts()', ng-disabled='selectedTimeCourt.length == 0') Book selected court(s)
 
   section(id='contacts-container', class='section-spaced', ng-controller='ContactsCtrl')
     h1 Contacts&nbsp;

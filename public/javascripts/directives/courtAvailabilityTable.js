@@ -199,6 +199,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     });
                 }
 
+                $scope.selectedTimeCourt = selectedTimeCourts;
                 sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
             };
 

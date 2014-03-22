@@ -11,5 +11,6 @@ ERROR_DB_FAILURE = 10;
 
 
 isProd = false;
+paymentAPI = 'googleWallet'; // googleWallet || payPal
 
 
