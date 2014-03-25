@@ -4,6 +4,7 @@
 
 window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope, $scope) {
     $scope.selectedTimeCourt = [];
+    $scope.repeatBooking = false;
     $(function() {
         var dateInputContainer = $('#time-court-selection-date-input');
         var timeInputContainer = $('#time-court-selection-time-input');
