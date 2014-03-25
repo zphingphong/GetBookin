@@ -116,6 +116,9 @@ block mainContainer
                 div(class='col-sm-6')
                   input(type='text', class='form-control bfh-number', value='10')
                 div(class='col-sm-2 no-pad pad-top-bottom-small') occurrances
+          div(class='modal-footer')
+            button(type='button', class='btn btn-default', data-dismiss='modal') Close
+            button(type='button', class='btn btn-primary', ng-click='') Done
 
   section(id='contacts-container', class='section-spaced', ng-controller='ContactsCtrl')
     h1 Contacts&nbsp;
