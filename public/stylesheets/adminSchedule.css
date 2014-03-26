@@ -12,10 +12,16 @@ address {
   margin: 0;
   display: inline;
 }
-#error-msg-container {
+#error-msg-container,
+#msg-container,
+#server-msg-container {
   position: fixed;
   top: 60px;
   right: 15px;
+  z-index: 9999;
+}
+#error-msg-container,
+#msg-container {
   display: none;
 }
 .modal-footer {
@@ -38,6 +44,9 @@ address {
 }
 .right {
   float: right;
+}
+.no-pad {
+  padding: 0;
 }
 .pad-small {
   padding: 0.5em;

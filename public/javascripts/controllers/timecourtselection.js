@@ -45,6 +45,12 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope,
         });
     });
 
+    $rootScope.$on('bookingStored', function(event){
+        if($scope.isAdmin){
+            $scope.repeatBooking = false;
+        }
+    });
+
     $scope.showAvailibility = function(){
         $scope.refreshSchedule();
     };
@@ -93,6 +99,7 @@ window.getBookinNgApp.controller('TimeCourtSelectionCtrl', function ($rootScope,
         });
 
         console.log($scope.selectedTimeCourt);
+        sessionStorage.selectedTimeCourt = JSON.stringify($scope.selectedTimeCourt);
     };
 });
 

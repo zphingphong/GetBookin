@@ -45,6 +45,9 @@ address {
 .right {
   float: right;
 }
+.no-pad {
+  padding: 0;
+}
 .pad-small {
   padding: 0.5em;
 }

@@ -179,7 +179,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 var dateTimeStr = $scope.schedule.times[timeIndex].dateTime;
 //                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format(window.dateTimeClientFormat); //For saving locally (must be string for date comparison)
                 var locationObjId = $scope.selectedLocation._id;
-                var selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
+                var selectedTimeCourts = $scope.repeatBooking ? $scope.originalSelectedTimeCourt : JSON.parse(sessionStorage.selectedTimeCourt);
 
                 if(target.courtInfo.selected){
                     target.courtInfo.selected = false;
@@ -200,7 +200,12 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 }
 
                 $scope.selectedTimeCourt = selectedTimeCourts;
-                sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
+                if($scope.repeatBooking) {
+                    $scope.originalSelectedTimeCourt = selectedTimeCourts;
+                    $scope.repeatSelectedBooking();
+                } else {
+                    sessionStorage.selectedTimeCourt = JSON.stringify(selectedTimeCourts);
+                }
             };
 
             $scope.showBookingInfo = function(booking){

@@ -27,8 +27,37 @@ block mainContainer
           h4 Current {{locationName}} court availability for {{currentDate}} at {{currentTime}}
       court-availability-table
       .row
-        div(class='col-sm-12 text-right')
+        div(class='col-sm-6')
+          button(type='button', data-toggle='modal', data-target='#booking-repeat-selection-container', class='btn btn-default margin-top-bottom-small', ng-click='', ng-disabled='selectedTimeCourt.length == 0')
+            span(ng-class='{"glyphicon glyphicon-unchecked" : !repeatBooking, "glyphicon glyphicon-check" : repeatBooking}')
+            | &nbsp;Repeat this booking
+        div(class='col-sm-6 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='bookSelectedCourts()', ng-disabled='selectedTimeCourt.length == 0') Book selected court(s)
+    div(class='modal fade', id='booking-repeat-selection-container', tabindex='-1', role='dialog', aria-labelledby='time-repeat-selection-title', aria-hidden='true')
+      div(class='modal-dialog')
+        div(class='modal-content')
+          div(class='modal-header')
+            button(type='button', class='close', data-dismiss='modal', aria-hidden='true') &times;
+            h4(class='modal-title') This booking...
+          div(class='modal-body')
+            form
+              .row
+                div(class='col-sm-4')
+                  strong Repeats:
+                div(class='col-sm-8')
+                  div(class='bfh-selectbox', data-value='{{repeatType}}', id='booking-repeat-type-input')
+                    div(data-value='daily') Daily
+                    div(data-value='weekly') Weekly
+                    div(data-value='monthly') Monthly
+              .row(class='margin-top-bottom-small')
+                div(class='col-sm-4')
+                  strong Ends after:
+                div(class='col-sm-6')
+                  input(type='text', class='form-control bfh-number', data-min='1', ng-model='endAfter', id='booking-repeat-ends-after-input')
+                div(class='col-sm-2 no-pad pad-top-bottom-small') occurrances
+          div(class='modal-footer')
+            button(type='button', class='btn btn-default', data-dismiss='modal') Close
+            button(type='button', class='btn btn-primary', data-dismiss='modal', ng-click='repeatSelectedBooking()') Done
   section(id='contacts-container', class='section-spaced', ng-controller='ContactsCtrl')
     h1 Contacts&nbsp;
       small How could we contact you?
