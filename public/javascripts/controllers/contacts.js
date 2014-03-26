@@ -26,6 +26,13 @@ window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope, $
 
     });
 
+    $rootScope.$on('bookingStored', function(event){
+        if($scope.isAdmin){
+            $scope.name = $scope.note = '';
+            $scope.phoneNo = '+1';
+        }
+    });
+
     $scope.saveContactInfoAndViewSummary = function(){
         sessionStorage.contactInfo = JSON.stringify({
             contactName: $scope.name,
