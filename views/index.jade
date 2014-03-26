@@ -97,7 +97,7 @@ block mainContainer
                 div(class='col-sm-4')
                   strong Repeats:
                 div(class='col-sm-8')
-                  div(class='bfh-selectbox', data-value='weekly')
+                  div(class='bfh-selectbox', data-value='{{repeatType}}', id='booking-repeat-type-input')
                     div(data-value='daily') Daily
                     div(data-value='weekly') Weekly
                     div(data-value='monthly') Monthly
@@ -114,11 +114,11 @@ block mainContainer
                 div(class='col-sm-4')
                   strong Ends after:
                 div(class='col-sm-6')
-                  input(type='text', class='form-control bfh-number', value='10')
+                  input(type='text', class='form-control bfh-number', data-min='1', ng-model='endAfter', id='booking-repeat-ends-after-input')
                 div(class='col-sm-2 no-pad pad-top-bottom-small') occurrances
           div(class='modal-footer')
             button(type='button', class='btn btn-default', data-dismiss='modal') Close
-            button(type='button', class='btn btn-primary', ng-click='') Done
+            button(type='button', class='btn btn-primary', data-dismiss='modal', ng-click='repeatSelectedBooking()') Done
 
   section(id='contacts-container', class='section-spaced', ng-controller='ContactsCtrl')
     h1 Contacts&nbsp;

@@ -87,8 +87,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 $http.get('/booking', {
                     //Search for any booking since the beginning of today and the next 47 hours to make sure in case the schedule wraps around
                     params: {
-                        startDateTime: moment(todayDate).hour(0).format('YYYY-MM-DD hA'),
-                        endDateTime: moment(todayDate).add('h', 47).format('YYYY-MM-DD hA'),
+                        startDateTime: moment(todayDate).hour(0).format(window.dateTimeClientFormat),
+                        endDateTime: moment(todayDate).add('h', 47).format(window.dateTimeClientFormat),
                         location: $scope.selectedLocation._id,
                         accountType: $rootScope.user ? $rootScope.user.accountType : null
                     }
@@ -116,7 +116,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                         }
 
                         var time = todayDate.hour(iTime).format('hA');
-                        var dateTimeStr = todayDate.format('YYYY-MM-DD hA');
+                        var dateTimeStr = todayDate.format(window.dateTimeClientFormat);
                         availability.times.push({
                             time: time,
                             date: todayDate.format('MMM Do'),
@@ -137,7 +137,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
                             //Check if the court is available
                             var existingBookings = $.grep(bookings, function(booking){
-                                return moment(booking.dateTime).format('YYYY-MM-DD hA') == dateTimeStr && booking.courtNo-1 == courtNo;
+                                return moment(booking.dateTime).format(window.dateTimeClientFormat) == dateTimeStr && booking.courtNo-1 == courtNo;
                             });
 
 //                            console.log(existingBookings);
@@ -177,7 +177,7 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 var courtNo = courtIndex + 1; //Refer to court number based on where it's positioned in the UI
                 var price = $scope.schedule.courts[courtIndex][timeIndex].price;
                 var dateTimeStr = $scope.schedule.times[timeIndex].dateTime;
-//                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format('YYYY-MM-DD hA'); //For saving locally (must be string for date comparison)
+//                var dateTimeStr = $scope.schedule.date.hour(selectedHour).format(window.dateTimeClientFormat); //For saving locally (must be string for date comparison)
                 var locationObjId = $scope.selectedLocation._id;
                 var selectedTimeCourts = JSON.parse(sessionStorage.selectedTimeCourt);
 
