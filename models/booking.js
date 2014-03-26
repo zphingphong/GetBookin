@@ -27,7 +27,8 @@ var bookingSchema = mongoose.Schema({
         method: String,
         dollar: Number,
         payPalPayKey: String
-    }
+    },
+    note: String
 });
 
 var bookingModel = mongoose.model('Booking', bookingSchema);

@@ -30,6 +30,10 @@ div(id='booking-info-popup', class='modal fade', role='dialog', ng-if='isAdmin')
           div(class='col-sm-6')
             strong Paid
           div(class='col-sm-6 capitalize') {{bookingInfo.payment.paid}}
+        .row
+          div(class='col-sm-6')
+            strong Note
+          div(class='col-sm-6 capitalize') {{bookingInfo.note}}
       div(class='modal-footer')
         button(type='button', class='btn btn-danger', data-dismiss='modal', ng-click='cancelCourtByAdmin(bookingInfo)') Cancel This Booking
         button(type='button', class='btn btn-default', data-dismiss='modal') Close

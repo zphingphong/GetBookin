@@ -55,8 +55,9 @@ exports.book = function(req, res){
     bookings.forEach(function(booking, index, bookings){
         booking.bookingId = bookingId;
         booking.contactName = contactInfo.contactName;
+        booking.note = contactInfo.note;
         booking.contactNo = contactInfo.contactNo;
-        booking.dateTime = moment(booking.dateTime, window.dateTimeClientFormat).toDate();
+        booking.dateTime = moment(booking.dateTime, dateTimeClientFormat).toDate();
         booking.payment = payment;
     });
 
@@ -129,7 +130,7 @@ exports.book = function(req, res){
 };
 
 exports.searchBooking = function(req, res){
-    bookingModel.bookingByDateTimeRange(moment(req.query.startDateTime, window.dateTimeClientFormat), moment(req.query.endDateTime, window.dateTimeClientFormat), req.query.location, function(bookings){
+    bookingModel.bookingByDateTimeRange(moment(req.query.startDateTime, dateTimeClientFormat), moment(req.query.endDateTime, dateTimeClientFormat), req.query.location, function(bookings){
         res.send(bookings);
     });
 };

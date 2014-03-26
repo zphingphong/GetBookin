@@ -29,7 +29,8 @@ window.getBookinNgApp.controller('ContactsCtrl', function ($rootScope, $scope, $
     $scope.saveContactInfoAndViewSummary = function(){
         sessionStorage.contactInfo = JSON.stringify({
             contactName: $scope.name,
-            contactNo: $scope.phoneNo
+            contactNo: $scope.phoneNo,
+            note: $scope.note ? $scope.note : ''
         });
         $rootScope.$emit('contactsFilled');
     }
