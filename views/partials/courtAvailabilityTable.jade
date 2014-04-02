@@ -3,40 +3,47 @@
 div(id='booking-info-popup', class='modal fade', role='dialog', ng-if='isAdmin')
   div(class='modal-dialog')
     div(class='modal-content')
-      div(class='modal-header')
-        h4(class='modal-title') Booking Information for Court {{bookingInfo.courtNo}} at {{bookingInfo.dateTime | date:'ha'}}
-      div(class='modal-body')
-        .row
-          div(class='col-sm-6')
-            strong Contact Name
-          div(class='col-sm-6 capitalize') {{bookingInfo.contactName}}
-        .row
-          div(class='col-sm-6')
-            strong Contact Phone
-          div(class='col-sm-6') {{bookingInfo.contactNo}}
-        .row
-          div(class='col-sm-6')
-            strong Court Number
-          div(class='col-sm-6') {{bookingInfo.courtNo}}
-        .row
-          div(class='col-sm-6')
-            strong Date
-          div(class='col-sm-6') {{bookingInfo.dateTime | date: 'fullDate'}}
-        .row
-          div(class='col-sm-6')
-            strong Time
-          div(class='col-sm-6') {{bookingInfo.dateTime | date: 'ha'}}
-        .row
-          div(class='col-sm-6')
-            strong Paid
-          div(class='col-sm-6 capitalize') {{bookingInfo.payment.paid}}
-        .row
-          div(class='col-sm-6')
-            strong Note
-          div(class='col-sm-6 capitalize') {{bookingInfo.note}}
-      div(class='modal-footer')
-        button(type='button', class='btn btn-danger', data-dismiss='modal', ng-click='cancelCourtByAdmin(bookingInfo)') Cancel This Booking
-        button(type='button', class='btn btn-default', data-dismiss='modal') Close
+      form(name='bookingChangeForm')
+        div(class='modal-header')
+          h4(class='modal-title') Booking Information for Court {{bookingInfo.courtNo}} at {{bookingInfo.dateTime | date:'ha'}}
+        div(class='modal-body')
+          .row
+            div(class='col-sm-6')
+              strong Contact Name
+            div(class='col-sm-6 capitalize')
+              input(type='text', class='form-control', ng-model='bookingInfo.contactName')
+          div(class='row margin-top-bottom-small')
+            div(class='col-sm-6')
+              strong Contact Phone
+            div(class='col-sm-6')
+              input(type='text', class='form-control bfh-phone', data-format='+1 (ddd) ddd-dddd', ng-model='bookingInfo.contactNo')
+          .row
+            div(class='col-sm-6')
+              strong Court Number
+            div(class='col-sm-6') {{bookingInfo.courtNo}}
+          div(class='row margin-top-bottom-small')
+            div(class='col-sm-6')
+              strong Date
+            div(class='col-sm-6') {{bookingInfo.dateTime | date: 'fullDate'}}
+          .row
+            div(class='col-sm-6')
+              strong Time
+            div(class='col-sm-6') {{bookingInfo.dateTime | date: 'ha'}}
+          div(class='row margin-top-bottom-small')
+            div(class='col-sm-6')
+              strong Paid
+            div(class='col-sm-6 capitalize')
+              input(type='checkbox', ng-checked='bookingInfo.payment.paid == "full" ? true : false', ng-model='bookingInfo.isPaid')
+          .row
+            div(class='col-sm-6')
+              strong Note
+            div(class='col-sm-6 capitalize')
+              textarea(row='3', class='form-control', ng-model='bookingInfo.note')
+        div(class='modal-footer')
+          button(type='button', class='btn btn-success', data-dismiss='modal', ng-click='updateCourtByAdmin(bookingInfo)') Save Update
+          button(type='button', class='btn btn-danger', data-dismiss='modal', ng-click='cancelOneCourtByAdmin(bookingInfo)') Cancel This
+          button(type='button', class='btn btn-danger', data-dismiss='modal', ng-click='cancelCourtByAdmin(bookingInfo)') Cancel Booking
+          button(type='button', class='btn btn-default', data-dismiss='modal') Close
 
 table(class='table table-hover', id='time-court-selection-table')
   thead
@@ -52,6 +59,6 @@ table(class='table table-hover', id='time-court-selection-table')
         button(type='button', ng-if='courtInfo.isAvailable', ng-click='timeCourtSelected(this)', ng-class='{"btn btn-info" : !courtInfo.selected, "btn btn-success" : courtInfo.selected}')
           span(ng-class='{"glyphicon glyphicon-unchecked" : !courtInfo.selected, "glyphicon glyphicon-check" : courtInfo.selected}')
           //|  {{courtInfo.isAvailable}}
-          | {{courtInfo.price | currency:"$"}}
+          |  {{courtInfo.price | currency:"$"}}
         button(type='button', data-toggle='modal', data-target='#booking-info-popup', ng-if='!courtInfo.isAvailable && isAdmin', ng-click='showBookingInfo(courtInfo.booking)', ng-class='{"btn btn-default" : courtInfo.paid == "full", "btn btn-warning" : courtInfo.paid == "none"}')
           | {{courtInfo.booking.contactName}}

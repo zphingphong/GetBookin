@@ -232,6 +232,22 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     }
                 });
             };
+
+            $scope.updateCourtByAdmin = function(bookingInfo){
+                console.log(bookingInfo);
+                $http.post('/booking/adminchange', {
+                    bookingInfo: bookingInfo,
+                    isAdmin: true
+                }).success(function(results) {
+                    if(results.success){
+                        $scope.refreshSchedule();
+                    } else {
+                        $rootScope.errorMsg = results.error;
+                        $('#error-msg-container').show();
+                    }
+                });
+            };
+
         },
         link: function(scope, element, attrs){
         }

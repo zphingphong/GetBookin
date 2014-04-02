@@ -46,6 +46,7 @@ app.get('/booking/cancel/:bookingId', booking.cancelBooking);
 app.get('/booking/paid/:bookingId', booking.paidBooking);
 app.get('/booking/cancelpayment/:bookingId', booking.cancelPaymentBooking);
 app.get('/booking/admincancel/:bookingId', booking.cancelBookingByAdmin);
+app.post('/booking/adminchange', booking.changeBookingByAdmin);
 app.get('/booking/change/:bookingId', booking.getChangeBooking);
 app.post('/booking/change', booking.changeBooking);
 app.post('/user', user.signIn);

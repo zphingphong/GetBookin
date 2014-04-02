@@ -241,6 +241,29 @@ exports.getChangeBooking = function(req, res){
     });
 };
 
+exports.changeBookingByAdmin = function(req, res){
+    if(JSON.parse(req.cookies.user).accountType == 'admin'){ // Make sure the user is admin
+        bookingModel.updateBookingById(req.body.bookingInfo.bookingId, {
+            'payment.paid': (req.body.bookingInfo.isPaid != undefined) ? (req.body.bookingInfo.isPaid ? 'full' : 'none') : req.body.bookingInfo.payment.paid,
+            contactName: req.body.bookingInfo.contactName,
+            contactNo: req.body.bookingInfo.contactNo,
+            note: req.body.bookingInfo.note
+        }, function(numberAffected, rawResponse){
+            if(numberAffected > 0){
+                res.send({
+                    success: true
+                });
+            } else {
+                res.send({
+                    success: false,
+                    errorMsg: 'Failed to update the booking.'
+                });
+            }
+
+        });
+    }
+};
+
 exports.changeBooking = function(req, res){
     bookingModel.deleteBookingById(req.body.oldBooking[0].bookingId, function(deletedcount){
         if(deletedcount == req.body.oldBooking.length){
