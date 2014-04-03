@@ -10,9 +10,9 @@ block mainContainer
       small What is the booking you'd like to change?
     .well
       .row
-        div(class='col-sm-4') Confirmation number of the booking
+        div(class='col-sm-4') Confirmation number of the booking (For example, MyCourtH1393903464635)
         div(class='col-sm-8')
-          input(type='text', class='form-control', placeholder='MyCourtH1393903464635', ng-model='bookingId')
+          input(type='text', class='form-control', ng-model='bookingId')
       .row
         div(class='col-sm-12 text-right')
           button(type='button', class='btn btn-success margin-top-bottom-small right', ng-click='cancelBooking()') Cancel booking

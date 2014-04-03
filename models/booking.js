@@ -54,7 +54,22 @@ exports.book = function(bookings, cb){
     })
 };
 
-exports.bookingByDateTimeRange = function(startDateTime, endDateTime, location, cb){
+exports.getBookingByCourtAndDateTime = function(courtNo, dateTime, location, cb){
+    bookingModel.find({
+        dateTime: dateTime,
+        location: location,
+        courtNo: courtNo
+    }, function (err, bookings) {
+        if(err){
+            console.error('Cannot retrieve booking from database, error: ');
+            console.error(err);
+        } else {
+            cb(bookings);
+        }
+    });
+};
+
+exports.getBookingByDateTimeRange = function(startDateTime, endDateTime, location, cb){
     bookingModel.find({
         dateTime: {
             $gte: startDateTime,
@@ -87,6 +102,21 @@ exports.getBookingAndLocationById = function(bookingId, cb){
 exports.deleteBookingById = function(bookingId, cb){
     bookingModel.find({
         bookingId: bookingId
+    }).remove(function (err, deletedcount) {
+        if(err){
+            console.error('Cannot retrieve booking from database, error: ');
+            console.error(err);
+        } else {
+            cb(deletedcount);
+        }
+    });
+};
+
+exports.deleteBookingByIdCourtTime = function(bookingId, courtNo, dateTime, cb){
+    bookingModel.find({
+        bookingId: bookingId,
+        courtNo: courtNo,
+        dateTime: dateTime
     }).remove(function (err, deletedcount) {
         if(err){
             console.error('Cannot retrieve booking from database, error: ');

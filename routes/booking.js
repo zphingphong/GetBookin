@@ -45,12 +45,15 @@ var getBookingPaymentInfo = function(bookings, cb){
     });
 };
 
-exports.book = function(req, res){
+var doBook = function(req, res, cb){
     var bookings = req.body.selectedTimeCourt;
     var contactInfo = req.body.contactInfo;
     var payment = req.body.payment;
     var bookingId = req.body.bookingId;
     var isAdmin = req.body.isAdmin;
+    var isSelectionAvailable = true;
+    var unavailableSelection;
+    var checkCount = 0;
 
     bookings.forEach(function(booking, index, bookings){
         booking.bookingId = bookingId;
@@ -59,78 +62,109 @@ exports.book = function(req, res){
         booking.contactNo = contactInfo.contactNo;
         booking.dateTime = moment(booking.dateTime, dateTimeClientFormat).toDate();
         booking.payment = payment;
-    });
 
-    bookingModel.book(bookings, function(status){
-        if(status.success && !isAdmin && payment.paid != 'full'){
-            getBookingPaymentInfo(bookings, function(args){
-                //Store paid price
-                bookingModel.updateBookingById(bookings[0].bookingId, {
-                    'payment.dollar': args.price + args.previousPaid
-                }, function(numberAffected, rawResponse){
-                });
+        // Retrieve booking to check if they're already exist. Search booking by time and court.
+        bookingModel.getBookingByCourtAndDateTime(booking.courtNo, booking.dateTime, booking.location, function(foundBookings){
+            checkCount++;
+            if(foundBookings.length > 0){
+                isSelectionAvailable = false;
+                unavailableSelection = booking;
+            }
 
-                if(args.success){
-                    var totalPrice = args.price;
-                    var payPalPayload = {
-                        requestEnvelope: {
-                            errorLanguage:  'en_US'
-                        },
-                        actionType:     'PAY',
-                        currencyCode:   'CAD',
-                        feesPayer:      'EACHRECEIVER',
-                        memo:           'Booking payment',
-                        cancelUrl:      'http://www.getbookin.com/booking/cancelpayment/' + bookingId,
-                        returnUrl:      'http://www.getbookin.com/booking/paid/' + bookingId,
-//                        cancelUrl:      'http://localhost:3000/booking/cancelpayment/' + bookingId,
-//                        returnUrl:      'http://localhost:3000/booking/paid/' + bookingId,
-                        receiverList: {
-                            receiver: [{
-                                email:  args.payPalAccount,
-                                amount: totalPrice
-                            }]
-                        }
-                    };
+            if(bookings.length == checkCount){ // Last booking to check
+                if(isSelectionAvailable){
+                    bookingModel.book(bookings, function(status){
+                        if(status.success && !isAdmin && payment.paid != 'full'){
+                            getBookingPaymentInfo(bookings, function(args){
+                                //Store paid price
+                                bookingModel.updateBookingById(bookings[0].bookingId, {
+                                    'payment.dollar': args.price + args.previousPaid
+                                }, function(numberAffected, rawResponse){
+                                });
 
-                    paypalSdk.pay(payPalPayload, function (err, response) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            payment.payPalPayKey = response.payKey;
-                            // Update pay key to the booking object
-                            bookingModel.updateBookingById(bookingId, {
-                                'payment.payPalPayKey': response.payKey
-                            }, function(numberAffected, rawResponse){
-                                if(numberAffected > 0){
+                                if(args.success){
+                                    var totalPrice = args.price;
+                                    var payPalPayload = {
+                                        requestEnvelope: {
+                                            errorLanguage:  'en_US'
+                                        },
+                                        actionType:     'PAY',
+                                        currencyCode:   'CAD',
+                                        feesPayer:      'EACHRECEIVER',
+                                        memo:           'Booking payment',
+                                        cancelUrl:      'http://www.getbookin.com/booking/cancelpayment/' + bookingId,
+                                        returnUrl:      'http://www.getbookin.com/booking/paid/' + bookingId,
+                                        //                        cancelUrl:      'http://localhost:3000/booking/cancelpayment/' + bookingId,
+                                        //                        returnUrl:      'http://localhost:3000/booking/paid/' + bookingId,
+                                        receiverList: {
+                                            receiver: [{
+                                                email:  args.payPalAccount,
+                                                amount: totalPrice
+                                            }]
+                                        }
+                                    };
+
+                                    paypalSdk.pay(payPalPayload, function (err, response) {
+                                        if (err) {
+                                            console.log(err);
+                                        } else {
+                                            payment.payPalPayKey = response.payKey;
+                                            // Update pay key to the booking object
+                                            bookingModel.updateBookingById(bookingId, {
+                                                'payment.payPalPayKey': response.payKey
+                                            }, function(numberAffected, rawResponse){
+                                                if(numberAffected > 0){
+                                                    res.send({
+                                                        success: true,
+                                                        paymentApprovalUrl: response.paymentApprovalUrl
+                                                    });
+                                                }
+
+                                            });
+
+                                            // Response will have the original Paypal API response
+                                            //                            console.log(response);
+                                            // But also a paymentApprovalUrl, so you can redirect the sender to checkout easily
+                                            //                            console.log('Redirect to %s', response.paymentApprovalUrl);
+                                        }
+                                    });
+                                } else {
                                     res.send({
-                                        success: true,
-                                        paymentApprovalUrl: response.paymentApprovalUrl
+                                        success: false,
+                                        errorMsg: 'Cannot calculate total price for this booking. Please try again.'
                                     });
                                 }
-
                             });
-
-                            // Response will have the original Paypal API response
-//                            console.log(response);
-                            // But also a paymentApprovalUrl, so you can redirect the sender to checkout easily
-//                            console.log('Redirect to %s', response.paymentApprovalUrl);
+                        } else if(status.success && cb) {
+                            cb(status);
+                        } else {
+                            res.send(status);
                         }
                     });
                 } else {
-                    res.send({
-                        success: false,
-                        error: 'Cannot calculate total price for this booking. Please try again.'
-                    });
+                    if(cb){
+                        cb({
+                            success: false,
+                            errorMsg: 'Court ' + unavailableSelection.courtNo + ' you selected is not available on ' + moment(unavailableSelection.dateTime).format(dateTimeClientFormat) + ' Please select other times.'
+                        });
+                    } else {
+                        res.send({
+                            success: false,
+                            errorMsg: 'Court ' + unavailableSelection.courtNo + ' you selected is not available on ' + moment(unavailableSelection.dateTime).format(dateTimeClientFormat) + ' Please select other times.'
+                        });
+                    }
                 }
-            });
-        } else {
-            res.send(status);
-        }
+            }
+        });
     });
 };
 
+exports.book = function(req, res){
+    doBook(req, res, null);
+};
+
 exports.searchBooking = function(req, res){
-    bookingModel.bookingByDateTimeRange(moment(req.query.startDateTime, dateTimeClientFormat), moment(req.query.endDateTime, dateTimeClientFormat), req.query.location, function(bookings){
+    bookingModel.getBookingByDateTimeRange(moment(req.query.startDateTime, dateTimeClientFormat), moment(req.query.endDateTime, dateTimeClientFormat), req.query.location, function(bookings){
         res.send(bookings);
     });
 };
@@ -243,24 +277,55 @@ exports.getChangeBooking = function(req, res){
 
 exports.changeBookingByAdmin = function(req, res){
     if(JSON.parse(req.cookies.user).accountType == 'admin'){ // Make sure the user is admin
-        bookingModel.updateBookingById(req.body.bookingInfo.bookingId, {
-            'payment.paid': (req.body.bookingInfo.isPaid != undefined) ? (req.body.bookingInfo.isPaid ? 'full' : 'none') : req.body.bookingInfo.payment.paid,
-            contactName: req.body.bookingInfo.contactName,
-            contactNo: req.body.bookingInfo.contactNo,
-            note: req.body.bookingInfo.note
-        }, function(numberAffected, rawResponse){
-            if(numberAffected > 0){
-                res.send({
-                    success: true
-                });
-            } else {
-                res.send({
-                    success: false,
-                    errorMsg: 'Failed to update the booking.'
-                });
-            }
+        if(req.body.isCourtDateTimeChanged){
+            delete req.body.bookingInfo._id;
+            delete req.body.bookingInfo.__v;
+            req.body.selectedTimeCourt = [req.body.bookingInfo];
+            req.body.contactInfo = {
+                contactName: req.body.bookingInfo.contactName,
+                contactNo: req.body.bookingInfo.contactNo,
+                note: req.body.bookingInfo.note
+            };
+            req.body.payment = req.body.bookingInfo.payment;
+            req.body.bookingId = req.body.bookingInfo.bookingId;
+            req.body.isAdmin = true;
+            doBook(req, res, function(status){
+                if(status.success){
+                    bookingModel.deleteBookingByIdCourtTime(req.body.bookingInfo.bookingId, req.body.bookingInfo.originalCourtNo, req.body.bookingInfo.originalDateTime, function(deletedcount){
+                        if(deletedcount > 0){
+                            res.send({
+                                success: true,
+                                msg: 'The booking is moved.'
+                            });
+                        }
+                    });
+                } else {
+                    res.send({
+                        success: false,
+                        errorMsg: 'Failed to move this booking. ' + status.errorMsg
+                    });
+                }
+            });
+        } else {
+            bookingModel.updateBookingById(req.body.bookingInfo.bookingId, {
+                'payment.paid': (req.body.bookingInfo.isPaid != undefined) ? (req.body.bookingInfo.isPaid ? 'full' : 'none') : req.body.bookingInfo.payment.paid,
+                contactName: req.body.bookingInfo.contactName,
+                contactNo: req.body.bookingInfo.contactNo,
+                note: req.body.bookingInfo.note
+            }, function(numberAffected, rawResponse){
+                if(numberAffected > 0){
+                    res.send({
+                        success: true
+                    });
+                } else {
+                    res.send({
+                        success: false,
+                        errorMsg: 'Failed to update the booking.'
+                    });
+                }
 
-        });
+            });
+        }
     }
 };
 

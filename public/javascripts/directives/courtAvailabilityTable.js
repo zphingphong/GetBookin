@@ -209,7 +209,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
             };
 
             $scope.showBookingInfo = function(booking){
-                $scope.bookingInfo = booking;
+                $scope.bookingInfo = angular.copy(booking);
+                $scope.bookingInfo.dateTime = moment($scope.bookingInfo.dateTime).toDate();
+                $scope.bookingInfo.originalCourtNo = $scope.bookingInfo.courtNo;
+                $scope.bookingInfo.originalDateTime = angular.copy($scope.bookingInfo.dateTime);
             }
 
             $rootScope.$on('bookingStored', function(event){
@@ -234,15 +237,16 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
             };
 
             $scope.updateCourtByAdmin = function(bookingInfo){
-                console.log(bookingInfo);
+                bookingInfo.dateTime = moment(bookingInfo.dateTime).format(window.dateTimeClientFormat);
                 $http.post('/booking/adminchange', {
                     bookingInfo: bookingInfo,
-                    isAdmin: true
+                    isAdmin: true,
+                    isCourtDateTimeChanged: $scope.bookingChangeForm.courtNo.$dirty || $scope.bookingChangeForm.dateTime.$dirty
                 }).success(function(results) {
                     if(results.success){
                         $scope.refreshSchedule();
                     } else {
-                        $rootScope.errorMsg = results.error;
+                        $rootScope.errorMsg = results.errorMsg;
                         $('#error-msg-container').show();
                     }
                 });
