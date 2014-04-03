@@ -236,6 +236,22 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 });
             };
 
+            $scope.cancelOneCourtByAdmin = function(bookingInfo){
+                $http.post('/booking/admincancelone', {
+                    bookingInfo: bookingInfo,
+                    isAdmin: true
+                }).success(function(results) {
+                    if(results.success){
+                        $scope.refreshSchedule();
+                        $rootScope.msg = results.msg;
+                        $('#msg-container').show();
+                    } else {
+                        $rootScope.errorMsg = results.errorMsg;
+                        $('#error-msg-container').show();
+                    }
+                });
+            };
+
             $scope.updateCourtByAdmin = function(bookingInfo){
                 bookingInfo.dateTime = moment(bookingInfo.dateTime).format(window.dateTimeClientFormat);
                 $http.post('/booking/adminchange', {
@@ -245,6 +261,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 }).success(function(results) {
                     if(results.success){
                         $scope.refreshSchedule();
+                        $rootScope.msg = results.msg;
+                        $('#msg-container').show();
                     } else {
                         $rootScope.errorMsg = results.errorMsg;
                         $('#error-msg-container').show();

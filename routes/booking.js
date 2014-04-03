@@ -169,8 +169,15 @@ exports.searchBooking = function(req, res){
     });
 };
 
-exports.doCancelBooking = function(){
-
+exports.cancelOneBookingByAdmin = function(req, res){
+    bookingModel.deleteBookingByIdCourtTime(req.body.bookingInfo.bookingId, req.body.bookingInfo.courtNo, req.body.bookingInfo.dateTime, function(deletedcount){
+        if(deletedcount > 0){
+            res.send({
+                success: true,
+                msg: 'The booking is canceled.'
+            });
+        }
+    });
 };
 
 exports.cancelBooking = function(req, res){
