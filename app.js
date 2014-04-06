@@ -52,6 +52,14 @@ app.get('/booking/change/:bookingId', booking.getChangeBooking);
 app.post('/booking/change', booking.changeBooking);
 app.post('/user', user.signIn);
 app.post('/user/signout', user.signOut);
+app.get('/pages/adminSchedule', function(req, res){
+    if(req.cookies.user && JSON.parse(req.cookies.user).accountType == 'admin') {
+        res.render('pages/adminSchedule');
+    } else {
+        res.redirect('/');
+    }
+
+});
 
 //Views
 app.get('/partials/:name', routes.partials);
