@@ -210,6 +210,8 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
 
             $scope.showBookingInfo = function(booking){
                 $scope.bookingInfo = angular.copy(booking);
+                $scope.bookingInfo.isPaid = $scope.bookingInfo.payment.paid == "full" ? true : false;
+                console.log($scope.bookingInfo);
                 $scope.bookingInfo.dateTime = moment($scope.bookingInfo.dateTime).toDate();
                 $scope.bookingInfo.originalCourtNo = $scope.bookingInfo.courtNo;
                 $scope.bookingInfo.originalDateTime = angular.copy($scope.bookingInfo.dateTime);
