@@ -245,8 +245,10 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                 }).success(function(results) {
                     if(results.success){
                         $scope.refreshSchedule();
-                        $rootScope.msg = results.msg;
-                        $('#msg-container').show();
+                        if(results.msg){
+                            $rootScope.msg = results.msg;
+                            $('#msg-container').show();
+                        }
                     } else {
                         $rootScope.errorMsg = results.errorMsg;
                         $('#error-msg-container').show();
@@ -262,9 +264,12 @@ window.getBookinNgApp.directive('courtAvailabilityTable', function(){
                     isCourtDateTimeChanged: $scope.bookingChangeForm.courtNo.$dirty || $scope.bookingChangeForm.dateTime.$dirty
                 }).success(function(results) {
                     if(results.success){
-                        $scope.refreshSchedule();
-                        $rootScope.msg = results.msg;
-                        $('#msg-container').show();
+                        $scope.bookingChangeForm.$setPristine(); // Reset form dirty
+                        $scope.refreshSchedule(); // Refresh schedule to get the update on the changes
+                        if(results.msg){
+                            $rootScope.msg = results.msg;
+                            $('#msg-container').show();
+                        }
                     } else {
                         $rootScope.errorMsg = results.errorMsg;
                         $('#error-msg-container').show();
